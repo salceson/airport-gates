@@ -1,23 +1,19 @@
 package pl.edu.agh.bo.airportgates.gapsolver;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import net.sf.javailp.Linear;
-import org.junit.Before;
 import org.junit.Test;
 import pl.edu.agh.bo.airportgates.model.Flight;
 import pl.edu.agh.bo.airportgates.model.Gate;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
-import pl.edu.agh.bo.airportgates.util.SimpleFlightFlowFunction;
+import pl.edu.agh.bo.airportgates.util.Pair;
 import pl.edu.agh.bo.airportgates.util.SimpleGateDistancesFunction;
 
-public class ILPGateAssignmentSolverImplTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    ILPGateAssignmentSolverImpl instance;
 
-    @Before
-    public void setUp() throws Exception {
-        instance = new ILPGateAssignmentSolverImpl();
-    }
+public class ILPGAPSolverUtilsTest {
 
     @Test
     public void testGetObjectiveForProblem() throws Exception {
@@ -38,18 +34,27 @@ public class ILPGateAssignmentSolverImplTest {
 
         final ImmutableList<Gate> gates = ImmutableList.of(gate1, gate2);
 
-        final GateAssignmentProblem gap = new GateAssignmentProblem(flight, gates, new SimpleFlightFlowFunction(), new SimpleGateDistancesFunction());
+        final GateAssignmentProblem gap = new GateAssignmentProblem(flight, gates, new MockPAXFlowFunction(), new SimpleGateDistancesFunction());
 
         //when
-        final Linear result = instance.getObjectiveForProblem(gap);
+        final Linear result = ILPGAPSolverUtils.getObjectiveForProblem(gap);
 
         //then
-        for (Number n : result.getCoefficients()) {
-            System.out.println(n);
-        }
+        System.out.println(result.getCoefficients());
 
         for (Object var : result.getVariables()) {
             System.out.println(var);
+        }
+
+        assertThat(result.getVariables()).hasSize(36).doesNotHaveDuplicates();
+        assertThat(result.getCoefficients()).hasSize(36).containsOnly(0L, 20L);
+    }
+
+    static class MockPAXFlowFunction implements Function<Pair<Flight, Flight>, Integer> {
+
+        @Override
+        public Integer apply(Pair<Flight, Flight> flightFlightPair) {
+            return 10;
         }
     }
 }
