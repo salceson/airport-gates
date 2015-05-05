@@ -1,13 +1,14 @@
 package pl.edu.agh.bo.airportgates.gapsolver;
 
 import com.google.common.base.Function;
+import net.sf.javailp.Constraint;
 import net.sf.javailp.Linear;
 import pl.edu.agh.bo.airportgates.model.Flight;
 import pl.edu.agh.bo.airportgates.model.Gate;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 import pl.edu.agh.bo.airportgates.util.Pair;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Michal Janczykowski on 2015-05-05.
@@ -45,5 +46,107 @@ class ILPGAPSolverUtils {
         }
 
         return objective;
+    }
+
+    // each flight is assigned to exactly one gate
+    // for each i in A: sum of x_i_k is 1
+    public static Collection<Constraint> getXlimitConstraints(GateAssignmentProblem gap) {
+        final List<Flight> flights = gap.getFlights();
+        final List<Gate> gates = gap.getGates();
+
+        final List<Constraint> constraints = new ArrayList<>();
+
+        for(int i = 0; i < flights.size(); i++) {
+            final Linear linear = new Linear();
+            for(int k = 0; k < gates.size(); k++) {
+                final String xikVar = String.format("x_%d_%d", i, k);
+                linear.add(1, xikVar);
+            }
+            final Constraint xLimitConstraint = new Constraint(linear, "=", 1);
+            constraints.add(xLimitConstraint);
+        }
+
+        return constraints;
+    }
+
+    public static Collection<Constraint> getXYConstraints(GateAssignmentProblem gap) {
+        final List<Flight> flights = gap.getFlights();
+        final List<Gate> gates = gap.getGates();
+
+        final List<Constraint> constraints = new ArrayList<>();
+
+        for(int i = 0; i < flights.size(); i++) {
+            for(int j = 0; j < flights.size(); j++) {
+                for(int k = 0; k < gates.size(); k++) {
+                    final String xikVar = String.format("x_%d_%d", i, k);
+
+                    for(int l = 0; l < gates.size(); l++) {
+                        final String xjlVar = String.format("x_%d_%d", j, l);
+                        final String yVar = String.format("y_%d_%d_%d_%d", i, j, k, l);
+
+                        // xy constraints creation
+                        constraints.add(createConstraint89(yVar, xikVar));
+                        constraints.add(createConstraint89(yVar, xjlVar));
+                        constraints.add(createConstraint10(yVar, xikVar, xjlVar));
+                        constraints.add(createConstraint11upper(yVar));
+                        constraints.add(createConstraint11lower(yVar));
+                    }
+                }
+            }
+        }
+
+        return constraints;
+    }
+
+    private static Constraint createConstraint11upper(String yVar) {
+        final Linear linear = new Linear();
+        linear.add(1, yVar);
+        return new Constraint(linear, "<=", 1);
+    }
+
+    private static Constraint createConstraint11lower(String yVar) {
+        final Linear linear = new Linear();
+        linear.add(1, yVar);
+        return new Constraint(linear, ">=", 0);
+    }
+
+    private static Constraint createConstraint10(String yVar, String xikVar, String xjlVar) {
+        final Linear linear = new Linear();
+        linear.add(1, xikVar);
+        linear.add(1, xjlVar);
+        linear.add(-1, yVar);
+        return new Constraint(linear, "<=", 1);
+    }
+
+    private static Constraint createConstraint89(String yVar, String xVar) {
+        final Linear linear = new Linear();
+        linear.add(1, yVar);
+        linear.add(-1, xVar);
+        return new Constraint(linear, "<=", 0);
+    }
+
+    //returns collection of all variables in
+    //TODO currently returns x & y only
+    public static Collection<String> getAllVariables(GateAssignmentProblem gap) {
+        final List<Flight> flights = gap.getFlights();
+        final List<Gate> gates = gap.getGates();
+
+        final Set<String> variables = new HashSet<>();
+
+        for(int i = 0; i < flights.size(); i++) {
+            for (int j = 0; j < flights.size(); j++) {
+                for (int k = 0; k < gates.size(); k++) {
+                    final String xikVar = String.format("x_%d_%d", i, k);
+                    variables.add(xikVar);
+
+                    for (int l = 0; l < gates.size(); l++) {
+                        final String yVar = String.format("y_%d_%d_%d_%d", i, j, k, l);
+                        variables.add(yVar);
+                    }
+                }
+            }
+        }
+
+        return variables;
     }
 }
