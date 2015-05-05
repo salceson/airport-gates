@@ -1,14 +1,14 @@
 package pl.edu.agh.bo.airportgates.algorithm;
 
 import net.sf.javailp.*;
-import pl.edu.agh.bo.airportgates.model.AlgorithmData;
+import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 
 /**
  * @author Michał Ciołczyk
  */
 public class AlgorithmLpSolveImpl implements Algorithm {
     @Override
-    public void run(AlgorithmData algorithmData, int maxIterations) {
+    public void run(GateAssignmentProblem gateAssignmentProblem, int maxIterations) {
             SolverFactory factory = new SolverFactoryLpSolve();
             factory.setParameter(Solver.VERBOSE, 0);
             factory.setParameter(Solver.TIMEOUT, 100);
