@@ -7,7 +7,8 @@ import lombok.Data;
  */
 @Data
 public class Flight {
-    private FlightType flightType;
-    private String number;
-    private String otherAirport;
+    private final FlightType flightType;
+    private final AircraftType aircraftType;
+    private final String number;
+    private final String otherAirport;
 }

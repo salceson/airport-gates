@@ -4,9 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import net.sf.javailp.Linear;
 import org.junit.Test;
-import pl.edu.agh.bo.airportgates.model.Flight;
-import pl.edu.agh.bo.airportgates.model.Gate;
-import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
+import pl.edu.agh.bo.airportgates.model.*;
 import pl.edu.agh.bo.airportgates.util.Pair;
 import pl.edu.agh.bo.airportgates.util.SimpleGateDistancesFunction;
 
@@ -18,12 +16,9 @@ public class ILPGAPSolverUtilsTest {
     @Test
     public void testGetObjectiveForProblem() throws Exception {
         //given
-        final Flight flight1 = new Flight();
-        flight1.setNumber("LO1");
-        final Flight flight2 = new Flight();
-        flight2.setNumber("LO2");
-        final Flight flight3 = new Flight();
-        flight3.setNumber("LO3");
+        final Flight flight1 = new Flight(FlightType.INBOUND, AircraftType.SMALL, "LO1", "CDG");
+        final Flight flight2 = new Flight(FlightType.INBOUND, AircraftType.SMALL, "LO2", "CDG");
+        final Flight flight3 = new Flight(FlightType.INBOUND, AircraftType.SMALL, "LO3", "CDG");
 
         final ImmutableList<Flight> flight = ImmutableList.of(flight1, flight2, flight3);
 
