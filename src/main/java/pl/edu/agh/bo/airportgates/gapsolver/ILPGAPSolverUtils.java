@@ -48,7 +48,7 @@ class ILPGAPSolverUtils {
         return objective;
     }
 
-    // each flight is assigned to exactly one gate
+    // 1. each flight is assigned to exactly one gate
     // for each i in A: sum of x_i_k is 1
     public static Collection<Constraint> getXlimitConstraints(GateAssignmentProblem gap) {
         final List<Flight> flights = gap.getFlights();
@@ -64,6 +64,44 @@ class ILPGAPSolverUtils {
             }
             final Constraint xLimitConstraint = new Constraint(linear, "=", 1);
             constraints.add(xLimitConstraint);
+        }
+
+        return constraints;
+    }
+
+    // constraints 2 & 3 - set z to 1 only for two subsequent flights assigned to a single gate
+    public static Collection<Constraint> getSubsequentFlightsOnGateConstraints(GateAssignmentProblem gap) {
+        final List<Flight> flights = gap.getFlights();
+        final List<Gate> gates = gap.getGates();
+
+        final List<Constraint> constraints = new ArrayList<>();
+
+        for(int i = 0; i < flights.size(); i++) {
+            for (int k = 0; k < gates.size(); k++) {
+                final Linear linear = new Linear();
+                final String xikVar = String.format("x_%d_%d", i, k);
+                linear.add(1, xikVar);
+                for (int j = 0; j < flights.size(); j++) {
+                    final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
+                    linear.add(-1, zijkVar);
+                }
+                final Constraint constraint2 = new Constraint(linear, ">=", 0);
+                constraints.add(constraint2);
+            }
+        }
+
+        for(int j = 0; j < flights.size(); j++) {
+            for (int k = 0; k < gates.size(); k++) {
+                final Linear linear = new Linear();
+                final String xjkVar = String.format("x_%d_%d", j, k);
+                linear.add(1, xjkVar);
+                for (int i = 0; i < flights.size(); i++) {
+                    final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
+                    linear.add(-1, zijkVar);
+                }
+                final Constraint constraint3 = new Constraint(linear, ">=", 0);
+                constraints.add(constraint3);
+            }
         }
 
         return constraints;

@@ -28,7 +28,8 @@ public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
         ilpProblem.setObjective(objective, OptType.MIN);
 
         final Collection<Constraint> constraints = new ArrayList<>();
-        constraints.addAll(ILPGAPSolverUtils.getXlimitConstraints(gap));
+        constraints.addAll(ILPGAPSolverUtils.getXlimitConstraints(gap)); //constraint 1
+        constraints.addAll(ILPGAPSolverUtils.getSubsequentFlightsOnGateConstraints(gap)); //constraint 2 & 3
         constraints.addAll(ILPGAPSolverUtils.getXYConstraints(gap));
 
         for (Constraint constraint : constraints) {
