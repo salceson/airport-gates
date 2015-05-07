@@ -30,8 +30,10 @@ public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
         final Collection<Constraint> constraints = new ArrayList<>();
         constraints.addAll(ILPGAPSolverUtils.getXlimitConstraints(gap));
         constraints.addAll(ILPGAPSolverUtils.getXYConstraints(gap));
+        constraints.addAll(ILPGAPSolverUtils.getXYZ01Constraints(gap));
 
         for (Constraint constraint : constraints) {
+            System.out.println(constraint);
             ilpProblem.add(constraint);
         }
 
