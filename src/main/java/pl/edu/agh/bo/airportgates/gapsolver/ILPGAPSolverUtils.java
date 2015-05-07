@@ -126,8 +126,8 @@ class ILPGAPSolverUtils {
                         constraints.add(createConstraint89(yVar, xikVar));
                         constraints.add(createConstraint89(yVar, xjlVar));
                         constraints.add(createConstraint10(yVar, xikVar, xjlVar));
-                        constraints.add(createConstraint11upper(yVar));
-                        constraints.add(createConstraint11lower(yVar));
+                        constraints.add(createConstraint7811upper(yVar));
+                        constraints.add(createConstraint7811lower(yVar));
                     }
                 }
             }
@@ -136,15 +136,56 @@ class ILPGAPSolverUtils {
         return constraints;
     }
 
-    private static Constraint createConstraint11upper(String yVar) {
+    public static Collection<Constraint> getXYZ01Constraints(GateAssignmentProblem gap) {
+        final List<Flight> flights = gap.getFlights();
+        final List<Gate> gates = gap.getGates();
+
+        final List<Constraint> constraints = new ArrayList<>();
+        for(int i = 0; i < flights.size(); i++) {
+            for (int j = 0; j < flights.size(); j++) {
+                for (int k = 0; k < gates.size(); k++) {
+                    // z {0,1} constraints creation (7)
+                    final String zVar = String.format("z_%d_%d_%d", i, j, k);
+                    constraints.add(createConstraint7811lower(zVar));
+                    constraints.add(createConstraint7811upper(zVar));
+                }
+            }
+        }
+
+        for(int i = 0; i < flights.size(); i++) {
+            for(int j = 0; j < flights.size(); j++) {
+                for(int k = 0; k < gates.size(); k++) {
+                    for(int l = 0; l < gates.size(); l++) {
+                        final String yVar = String.format("y_%d_%d_%d_%d", i, j, k, l);
+                        // y {0,1} constraints creation (11)
+                        constraints.add(createConstraint7811upper(yVar));
+                        constraints.add(createConstraint7811lower(yVar));
+                    }
+                }
+            }
+        }
+
+        for(int i = 0; i < flights.size(); i++) {
+            for (int k = 0; k < gates.size(); k++) {
+                // x {0,1} constraints creation (6)
+                final String xVar = String.format("x_%d_%d", i, k);
+                constraints.add(createConstraint7811lower(xVar));
+                constraints.add(createConstraint7811upper(xVar));
+            }
+        }
+
+        return constraints;
+    }
+
+    private static Constraint createConstraint7811upper(String var) {
         final Linear linear = new Linear();
-        linear.add(1, yVar);
+        linear.add(1, var);
         return new Constraint(linear, "<=", 1);
     }
 
-    private static Constraint createConstraint11lower(String yVar) {
+    private static Constraint createConstraint7811lower(String var) {
         final Linear linear = new Linear();
-        linear.add(1, yVar);
+        linear.add(1, var);
         return new Constraint(linear, ">=", 0);
     }
 
@@ -163,8 +204,7 @@ class ILPGAPSolverUtils {
         return new Constraint(linear, "<=", 0);
     }
 
-    //returns collection of all variables in
-    //TODO currently returns x & y only
+    //returns collection of all variables in GAP
     public static Collection<String> getAllVariables(GateAssignmentProblem gap) {
         final List<Flight> flights = gap.getFlights();
         final List<Gate> gates = gap.getGates();
@@ -176,6 +216,9 @@ class ILPGAPSolverUtils {
                 for (int k = 0; k < gates.size(); k++) {
                     final String xikVar = String.format("x_%d_%d", i, k);
                     variables.add(xikVar);
+
+                    final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
+                    variables.add(zijkVar);
 
                     for (int l = 0; l < gates.size(); l++) {
                         final String yVar = String.format("y_%d_%d_%d_%d", i, j, k, l);
