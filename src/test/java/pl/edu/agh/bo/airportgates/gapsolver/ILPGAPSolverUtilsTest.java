@@ -16,9 +16,9 @@ public class ILPGAPSolverUtilsTest {
     @Test
     public void testGetObjectiveForProblem() throws Exception {
         //given
-        final Flight flight1 = new Flight(FlightType.INBOUND, AircraftType.SMALL, "LO1", "CDG");
-        final Flight flight2 = new Flight(FlightType.INBOUND, AircraftType.SMALL, "LO2", "CDG");
-        final Flight flight3 = new Flight(FlightType.INBOUND, AircraftType.SMALL, "LO3", "CDG");
+        final Flight flight1 = new Flight(100, FlightType.ARRIVAL, AircraftType.SMALL, "LO", "1", "CDG", "MUC");
+        final Flight flight2 = new Flight(120, FlightType.ARRIVAL, AircraftType.SMALL, "LO", "2", "CDG", "MUC");
+        final Flight flight3 = new Flight(140, FlightType.ARRIVAL, AircraftType.SMALL, "LO", "3", "CDG", "MUC");
 
         final ImmutableList<Flight> flight = ImmutableList.of(flight1, flight2, flight3);
 
