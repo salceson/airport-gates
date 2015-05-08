@@ -199,7 +199,7 @@ class ILPGAPSolverUtils {
         final Linear linear = new Linear();
         linear.add(M, zijkVar);
 
-        return new Constraint(linear, "<=", jOperTime - M - iOperTime);
+        return new Constraint(linear, "<=", jOperTime + M - iOperTime);
     }
 
     private static Constraint createConstraint5d(String zijkVar, long iOperTime, long jOperTime, long iGateTime, long jGateTime) {
