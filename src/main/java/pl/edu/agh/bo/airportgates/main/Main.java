@@ -14,6 +14,7 @@ import java.util.Map;
 
 /**
  * @author Michał Ciołczyk
+ * @author Michał Janczykowski
  */
 public class Main {
     public static void main(String[] args) {
@@ -58,22 +59,14 @@ public class Main {
         paxFlows.put(new Pair<>(klFlight3, klFlight2), 120);
         paxFlows.put(new Pair<>(klFlight6, klFlight2), 40);
 
-        final Gate gate1 = new Gate();
-        gate1.setNumber(1);
-        final Gate gate2 = new Gate();
-        gate2.setNumber(2);
-        final Gate gate3 = new Gate();
-        gate3.setNumber(3);
-        final Gate gate4 = new Gate();
-        gate4.setNumber(4);
-        final Gate gate5 = new Gate();
-        gate5.setNumber(5);
-        final Gate gate6 = new Gate();
-        gate6.setNumber(6);
-        final Gate gate7 = new Gate();
-        gate7.setNumber(7);
-        final Gate gate8 = new Gate();
-        gate8.setNumber(8);
+        final Gate gate1 = new Gate(1);
+        final Gate gate2 = new Gate(2);
+        final Gate gate3 = new Gate(3);
+        final Gate gate4 = new Gate(4);
+        final Gate gate5 = new Gate(5);
+        final Gate gate6 = new Gate(6);
+        final Gate gate7 = new Gate(7);
+        final Gate gate8 = new Gate(8);
 
         final ImmutableList<Gate> gates = ImmutableList.of(gate1, gate2, gate3, gate4, gate5, gate6, gate7, gate8);
 

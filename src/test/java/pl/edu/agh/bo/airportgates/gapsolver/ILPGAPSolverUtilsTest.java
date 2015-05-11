@@ -22,10 +22,8 @@ public class ILPGAPSolverUtilsTest {
 
         final ImmutableList<Flight> flight = ImmutableList.of(flight1, flight2, flight3);
 
-        final Gate gate1 = new Gate();
-        gate1.setNumber(1);
-        final Gate gate2 = new Gate();
-        gate2.setNumber(3);
+        final Gate gate1 = new Gate(1);
+        final Gate gate2 = new Gate(2);
 
         final ImmutableList<Gate> gates = ImmutableList.of(gate1, gate2);
 
