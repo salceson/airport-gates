@@ -32,16 +32,8 @@ public class EmployedBeesPhase {
                             .newSolutions(newSolutions)
                             .build()
             );
-
-            Thread thread = new Thread(worker);
-            thread.start();
-
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new ABCILPSolverException("Employed bees phase: threads not finished.", e);
-            }
-
+            // We wait for the threads to finish below
+            new Thread(worker).start();
             workers.add(worker);
         }
 

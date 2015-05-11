@@ -54,11 +54,22 @@ public class Solution implements Comparable<Solution> {
             calculateObjectiveAndCheckIfValid();
         }
 
-        if (objectiveValue >= 0) {
-            return 1.0 / (1.0 + objectiveValue);
+        switch (problem.getOptType()) {
+            case MIN:
+                if (objectiveValue >= 0) {
+                    return 1.0 / (1.0 + objectiveValue);
+                }
+
+                return 1.0 - objectiveValue;
+            case MAX:
+                if (objectiveValue <= 0) {
+                    return 1.0 / (1.0 - objectiveValue);
+                }
+
+                return 1.0 + objectiveValue;
         }
 
-        return 1 - objectiveValue;
+        return 0.0;
     }
 
     private void calculateObjectiveAndCheckIfValid() {
