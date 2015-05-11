@@ -15,12 +15,13 @@ import static com.google.common.collect.Lists.newArrayList;
  * @author Michał Ciołczyk
  */
 public class ABCILPSolver implements Solver {
-    public final static int THREAD_POOL_SIZE_PARAMETER = 4000;
-    public final static int BEES_COUNT_PARAMETER = 4001;
+    public static final int THREAD_POOL_SIZE_PARAMETER = 4000;
+    public static final int BEES_COUNT_PARAMETER = 4001;
     public static final int MODIFICATION_RATE_PARAMETER = 4002;
-    public static final int ITERATIONS_PARAMETER = 4003;
-    public static final int LOWER_BOUND_PARAMETER = 4004;
-    public static final int UPPER_BOUND_PARAMETER = 4005;
+    public static final int SEARCH_RANGE_PARAMETER = 4003;
+    public static final int ITERATIONS_PARAMETER = 4004;
+    public static final int LOWER_BOUND_PARAMETER = 4005;
+    public static final int UPPER_BOUND_PARAMETER = 4006;
 
     private final Random random = new Random();
     private final Map<Object, Object> parameters = new HashMap<>();
@@ -39,11 +40,12 @@ public class ABCILPSolver implements Solver {
     public Result solve(Problem problem) throws ABCILPSolverException {
         checkParameters();
         int poolSize, beesCount, iterations, lowerBound, upperBound;
-        double modificationRate;
+        double modificationRate, searchRange;
         try {
             poolSize = (int) parameters.get(THREAD_POOL_SIZE_PARAMETER);
             beesCount = (int) parameters.get(BEES_COUNT_PARAMETER);
             modificationRate = (double) parameters.get(MODIFICATION_RATE_PARAMETER);
+            searchRange = (double) parameters.get(SEARCH_RANGE_PARAMETER);
             iterations = (int) parameters.get(ITERATIONS_PARAMETER);
             lowerBound = (int) parameters.get(LOWER_BOUND_PARAMETER);
             upperBound = (int) parameters.get(UPPER_BOUND_PARAMETER);
@@ -72,8 +74,8 @@ public class ABCILPSolver implements Solver {
 
         //Main loop
         for (int cycle = 1; cycle <= iterations; cycle++) {
-            EmployedBeesPhase.run(problem, poolSize, beesCount, modificationRate, dimension,
-                    currentSolutions, newSolutions, beesPerThread);
+            EmployedBeesPhase.run(problem, poolSize, beesCount, modificationRate, searchRange,
+                    dimension, currentSolutions, newSolutions, beesPerThread);
 
             newSolutions = new Solution[beesCount];
         }
@@ -121,6 +123,13 @@ public class ABCILPSolver implements Solver {
             throw new ABCILPSolverException("You need to specify the modification rate" +
                     " by setting (example):\n"
                     + "solverFactory.setParameter(ABCILPSolver.MODIFICATION_RATE_PARAMETER, 0.3);\n"
+                    + "Please correct your solver configuration.");
+        }
+
+        if (!parameters.containsKey(SEARCH_RANGE_PARAMETER)) {
+            throw new ABCILPSolverException("You need to specify the search range" +
+                    " by setting (example):\n"
+                    + "solverFactory.setParameter(ABCILPSolver.SEARCH_RANGE_PARAMETER, 1.0);\n"
                     + "Please correct your solver configuration.");
         }
 

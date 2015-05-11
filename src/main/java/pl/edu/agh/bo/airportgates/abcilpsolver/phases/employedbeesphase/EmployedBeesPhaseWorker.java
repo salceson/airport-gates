@@ -1,6 +1,5 @@
 package pl.edu.agh.bo.airportgates.abcilpsolver.phases.employedbeesphase;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.sf.javailp.Problem;
 import pl.edu.agh.bo.airportgates.abcilpsolver.Solution;
@@ -21,7 +20,6 @@ import static com.google.common.collect.Lists.newArrayList;
 public class EmployedBeesPhaseWorker implements Runnable {
     private final EmployedBeesPhaseWorkerArgs args;
     private final Random random = new Random();
-    @Getter
     private Boolean finished = false;
 
     @Override
@@ -30,6 +28,7 @@ public class EmployedBeesPhaseWorker implements Runnable {
         int endBee = args.getEndBee();
         int dimension = args.getDimension();
         double modificationRate = args.getModificationRate();
+        double a = args.getSearchRange();
         Problem problem = args.getProblem();
         List<Object> variables = newArrayList(problem.getVariables());
         Solution[] currentSolutions = args.getSolutions();
@@ -43,7 +42,7 @@ public class EmployedBeesPhaseWorker implements Runnable {
                 long variableKVal = currentSolutions[k].getVariables().get(variable);
                 if (random.nextDouble() < modificationRate) {
                     newSolutionVariables.put(variable, variableVal
-                            + getPhi() * (variableVal - variableKVal));
+                            + Math.round(getPhi(a) * (variableVal - variableKVal)));
                 } else {
                     newSolutionVariables.put(variable, variableVal);
                 }
@@ -57,16 +56,17 @@ public class EmployedBeesPhaseWorker implements Runnable {
     }
 
     /**
-     * Returns random integer from range [-1, 1] (phi_i_j).
+     * Returns random number from range [-a, a] (phi_i_j).
      *
-     * @return int from range [-1, 1]
+     * @param a determines search range
+     * @return number from range [-a, a]
      */
-    private long getPhi() {
-        return random.nextInt(3) - 1;
+    private double getPhi(double a) {
+        return random.nextDouble() * 2 * a - a;
     }
 
     /**
-     * Returns random index that is not bee.
+     * Returns random bee's index that is not the current bee.
      *
      * @param bee index of current bee
      * @return index that is not bee

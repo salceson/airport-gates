@@ -13,8 +13,8 @@ import java.util.List;
  * @author Michał Ciołczyk
  */
 public class EmployedBeesPhase {
-    public static void run(Problem problem, int poolSize, int beesCount, double modificationRate, int dimension,
-                           Solution[] currentSolutions, Solution[] newSolutions, int beesPerThread)
+    public static void run(Problem problem, int poolSize, int beesCount, double modificationRate, double searchRange,
+                           int dimension, Solution[] currentSolutions, Solution[] newSolutions, int beesPerThread)
             throws ABCILPSolverException {
         List<EmployedBeesPhaseWorker> workers = new ArrayList<>();
 
@@ -23,6 +23,7 @@ public class EmployedBeesPhase {
                     EmployedBeesPhaseWorkerArgs.builder()
                             .beesCount(beesCount)
                             .modificationRate(modificationRate)
+                            .searchRange(searchRange)
                             .dimension(dimension)
                             .startBee(threadNum * beesPerThread)
                             .endBee(threadNum * beesPerThread + beesPerThread)
@@ -49,6 +50,8 @@ public class EmployedBeesPhase {
                 EmployedBeesPhaseWorkerArgs.builder()
                         .beesCount(beesCount)
                         .dimension(dimension)
+                        .searchRange(searchRange)
+                        .modificationRate(modificationRate)
                         .startBee(poolSize * beesPerThread)
                         .endBee(beesCount)
                         .problem(problem)

@@ -49,6 +49,18 @@ public class Solution implements Comparable<Solution> {
         return objectiveValue;
     }
 
+    public double getFitness() {
+        if (objectiveValue == null) {
+            calculateObjectiveAndCheckIfValid();
+        }
+
+        if (objectiveValue >= 0) {
+            return 1.0 / (1.0 + objectiveValue);
+        }
+
+        return 1 - objectiveValue;
+    }
+
     private void calculateObjectiveAndCheckIfValid() {
         List<Number> objectiveCoefficients = problem.getObjective().getCoefficients();
 
