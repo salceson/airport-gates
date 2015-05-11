@@ -335,23 +335,6 @@ class ILPGAPSolverUtils {
         return variables;
     }
 
-    //returns collection of all variables in GAP
-    public static Collection<String> getXVariables(GateAssignmentProblem gap) {
-        final List<Flight> flights = gap.getFlights();
-        final List<Gate> gates = gap.getGates();
-
-        final Set<String> variables = new HashSet<>();
-
-        for (int i = 0; i < flights.size(); i++) {
-            for (int k = 0; k < gates.size(); k++) {
-                final String xikVar = String.format("x_%d_%d", i, k);
-                variables.add(xikVar);
-            }
-        }
-
-        return variables;
-    }
-
     private static String getNextConstraintName() {
         return "Constraint " + (i++);
     }
