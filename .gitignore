@@ -65,3 +65,8 @@ hs_err_pid*
 # Libs
 
 !lib/*.jar
+
+# Logs
+*.log
+constraints.txt
+vars.txt

@@ -6,12 +6,15 @@ import pl.edu.agh.bo.airportgates.model.Gate;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by Michal Janczykowski on 2015-05-05.
+ * @author Michał Ciołczyk
+ * @author Michał Janczykowski
  */
 public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
 
@@ -38,14 +41,29 @@ public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
         constraints.addAll(ILPGAPSolverUtils.getXYZ01Constraints(gap)); //constraints 6, 7, 11
         constraints.addAll(ILPGAPSolverUtils.getXYConstraints(gap)); //constraints 8, 9, 10
 
-        for (Constraint constraint : constraints) {
-            System.out.println(constraint);
-            ilpProblem.add(constraint);
+        try {
+            FileWriter fw = new FileWriter("constraints.txt");
+            for (Constraint constraint : constraints) {
+                fw.write(constraint.toString());
+                fw.write("\n");
+                ilpProblem.add(constraint);
+            }
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         final Collection<String> variables = ILPGAPSolverUtils.getAllVariables(gap);
-        for (String var : variables) {
-            ilpProblem.setVarType(var, Integer.class);
+        try {
+            FileWriter fw = new FileWriter("vars.txt");
+            for (String var : variables) {
+                fw.write(var);
+                fw.write("\n");
+                ilpProblem.setVarType(var, Integer.class);
+            }
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         final Solver solver = solverFactory.get();
@@ -68,7 +86,7 @@ public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
             int k = 0;
             for (Gate gate : gates) {
                 final String xikVar = String.format("x_%d_%d", i, k);
-                if(ilpResult.get(xikVar).intValue() == 1) {
+                if (ilpResult.get(xikVar).intValue() == 1) {
                     gapResultBuilder.putGateAssignment(gate, flight);
                 }
                 k++;

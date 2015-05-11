@@ -36,6 +36,13 @@
             <systemPath>${basedir}/lib/javailp-1.2a.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>gurobi</groupId>
+            <artifactId>gurobi</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/gurobi.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>

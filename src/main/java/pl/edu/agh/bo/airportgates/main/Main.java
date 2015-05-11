@@ -2,13 +2,12 @@ package pl.edu.agh.bo.airportgates.main;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import net.sf.javailp.SolverFactoryLpSolve;
+import net.sf.javailp.SolverFactoryGurobi;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
 import pl.edu.agh.bo.airportgates.gapsolver.ILPGateAssignmentSolverImpl;
 import pl.edu.agh.bo.airportgates.model.*;
 import pl.edu.agh.bo.airportgates.util.MapBasedPaxFlowFunction;
 import pl.edu.agh.bo.airportgates.util.Pair;
-import pl.edu.agh.bo.airportgates.util.SimpleFlightFlowFunction;
 import pl.edu.agh.bo.airportgates.util.SimpleGateDistancesFunction;
 
 import java.util.Map;
@@ -20,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
         final GateAssignmentProblem gateAssignmentProblem = createProblem();
 
-        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryLpSolve());
+        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryGurobi());
         final GateAssignmentResult gapResult = solver.solve(gateAssignmentProblem);
 
         System.out.println(gapResult.getCost());
@@ -45,10 +44,10 @@ public class Main {
         final Flight klFlight5 = new Flight(200, FlightType.DEPARTURE, AircraftType.SMALL, "KL", "5", "MUC", "KRK");
         final Flight klFlight6 = new Flight(120, FlightType.ARRIVAL, AircraftType.SMALL, "KL", "6", "KRK", "MUC");
 
-//        final ImmutableList<Flight> flight = ImmutableList.of(loFlight1, klFlight1, loFlight2, klFlight2, loFlight3, klFlight3,
-//                loFlight4, klFlight4, loFlight5, klFlight5, loFlight6, klFlight6);
-
-        final ImmutableList<Flight> flight = ImmutableList.of(loFlight1, loFlight5);
+        final ImmutableList<Flight> flight = ImmutableList.of(loFlight1, klFlight1, loFlight2, klFlight2, loFlight3, klFlight3,
+                loFlight4, klFlight4, loFlight5, klFlight5, loFlight6, klFlight6);
+//
+//        final ImmutableList<Flight> flight = ImmutableList.of(loFlight1, loFlight5);
 
         final Map<Pair<Flight, Flight>, Integer> paxFlows = Maps.newHashMap();
         paxFlows.put(new Pair<>(loFlight1, loFlight5), 100);
@@ -77,7 +76,7 @@ public class Main {
         final Gate gate8 = new Gate();
         gate8.setNumber(8);
 
-        final ImmutableList<Gate> gates = ImmutableList.of(gate1/*, gate2, gate3, gate4, gate5, gate6, gate7, gate8*/);
+        final ImmutableList<Gate> gates = ImmutableList.of(gate1, gate2, gate3, gate4, gate5, gate6, gate7, gate8);
 
         return new GateAssignmentProblem(flight, gates, new MapBasedPaxFlowFunction(paxFlows), new SimpleGateDistancesFunction());
     }

@@ -5,8 +5,6 @@ import com.google.common.collect.ImmutableList;
 import lombok.Value;
 import pl.edu.agh.bo.airportgates.util.Pair;
 
-import java.util.List;
-
 /**
  * @author Michał Ciołczyk
  */

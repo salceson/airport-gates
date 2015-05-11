@@ -1,11 +1,9 @@
 package pl.edu.agh.bo.airportgates.model;
 
-import com.google.common.collect.*;
-import lombok.Builder;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 /**
  * @author Michal Janczykowski

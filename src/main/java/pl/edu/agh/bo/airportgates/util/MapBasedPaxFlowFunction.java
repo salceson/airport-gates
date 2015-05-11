@@ -4,7 +4,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import pl.edu.agh.bo.airportgates.model.Flight;
 
-import java.util.InputMismatchException;
 import java.util.Map;
 
 /**
@@ -20,7 +19,7 @@ public class MapBasedPaxFlowFunction implements Function<Pair<Flight, Flight>, I
 
     @Override
     public Integer apply(Pair<Flight, Flight> flightsPair) {
-        if(!paxFlows.containsKey(flightsPair)) {
+        if (!paxFlows.containsKey(flightsPair)) {
             return 0;
         }
         return paxFlows.get(flightsPair);

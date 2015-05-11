@@ -12,9 +12,11 @@ import pl.edu.agh.bo.airportgates.util.Pair;
 import java.util.*;
 
 /**
- * Created by Michal Janczykowski on 2015-05-05.
+ * @author Michał Ciołczyk
+ * @author Michał Janczykowski
  */
 class ILPGAPSolverUtils {
+    private static int i = 0;
 
     private static final long M = 2048;
 
@@ -65,7 +67,7 @@ class ILPGAPSolverUtils {
                 final String xikVar = String.format("x_%d_%d", i, k);
                 linear.add(1, xikVar);
             }
-            final Constraint xLimitConstraint = new Constraint(linear, "=", 1);
+            final Constraint xLimitConstraint = new Constraint(getNextConstraintName(), linear, "=", 1);
             constraints.add(xLimitConstraint);
         }
 
@@ -88,7 +90,7 @@ class ILPGAPSolverUtils {
                     final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
                     linear.add(-1, zijkVar);
                 }
-                final Constraint constraint2 = new Constraint(linear, ">=", 0);
+                final Constraint constraint2 = new Constraint(getNextConstraintName(), linear, ">=", 0);
                 constraints.add(constraint2);
             }
         }
@@ -102,7 +104,7 @@ class ILPGAPSolverUtils {
                     final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
                     linear.add(-1, zijkVar);
                 }
-                final Constraint constraint3 = new Constraint(linear, ">=", 0);
+                final Constraint constraint3 = new Constraint(getNextConstraintName(), linear, ">=", 0);
                 constraints.add(constraint3);
             }
         }
@@ -131,7 +133,7 @@ class ILPGAPSolverUtils {
                 }
             }
 
-            final Constraint constraint4 = new Constraint(linear, "<=", 1);
+            final Constraint constraint4 = new Constraint(getNextConstraintName(), linear, "<=", 1);
             constraints.add(constraint4);
         }
 
@@ -185,28 +187,28 @@ class ILPGAPSolverUtils {
         final Linear linear = new Linear();
         linear.add(M, zijkVar);
 
-        return new Constraint(linear, "<=", jOperTime + M - (iOperTime + iGateTime));
+        return new Constraint(getNextConstraintName(), linear, "<=", jOperTime + M - (iOperTime + iGateTime));
     }
 
     private static Constraint createConstraint5b(String zijkVar, long iOperTime, long jOperTime, long iGateTime, long jGateTime) {
         final Linear linear = new Linear();
         linear.add(M, zijkVar);
 
-        return new Constraint(linear, "<=", jOperTime - jGateTime + M - (iOperTime + iGateTime));
+        return new Constraint(getNextConstraintName(), linear, "<=", jOperTime - jGateTime + M - (iOperTime + iGateTime));
     }
 
     private static Constraint createConstraint5c(String zijkVar, long iOperTime, long jOperTime, long iGateTime, long jGateTime) {
         final Linear linear = new Linear();
         linear.add(M, zijkVar);
 
-        return new Constraint(linear, "<=", jOperTime + M - iOperTime);
+        return new Constraint(getNextConstraintName(), linear, "<=", jOperTime + M - iOperTime);
     }
 
     private static Constraint createConstraint5d(String zijkVar, long iOperTime, long jOperTime, long iGateTime, long jGateTime) {
         final Linear linear = new Linear();
         linear.add(M, zijkVar);
 
-        return new Constraint(linear, "<=", jOperTime - jGateTime + M - iOperTime);
+        return new Constraint(getNextConstraintName(), linear, "<=", jOperTime - jGateTime + M - iOperTime);
     }
 
     public static Collection<Constraint> getXYConstraints(GateAssignmentProblem gap) {
@@ -282,13 +284,13 @@ class ILPGAPSolverUtils {
     private static Constraint createConstraint7811upper(String var) {
         final Linear linear = new Linear();
         linear.add(1, var);
-        return new Constraint(linear, "<=", 1);
+        return new Constraint(getNextConstraintName(), linear, "<=", 1);
     }
 
     private static Constraint createConstraint7811lower(String var) {
         final Linear linear = new Linear();
         linear.add(1, var);
-        return new Constraint(linear, ">=", 0);
+        return new Constraint(getNextConstraintName(), linear, ">=", 0);
     }
 
     private static Constraint createConstraint10(String yVar, String xikVar, String xjlVar) {
@@ -296,14 +298,14 @@ class ILPGAPSolverUtils {
         linear.add(1, xikVar);
         linear.add(1, xjlVar);
         linear.add(-1, yVar);
-        return new Constraint(linear, "<=", 1);
+        return new Constraint(getNextConstraintName(), linear, "<=", 1);
     }
 
     private static Constraint createConstraint89(String yVar, String xVar) {
         final Linear linear = new Linear();
         linear.add(1, yVar);
         linear.add(-1, xVar);
-        return new Constraint(linear, "<=", 0);
+        return new Constraint(getNextConstraintName(), linear, "<=", 0);
     }
 
     //returns collection of all variables in GAP
@@ -348,5 +350,9 @@ class ILPGAPSolverUtils {
         }
 
         return variables;
+    }
+
+    private static String getNextConstraintName() {
+        return "Constraint " + (i++);
     }
 }
