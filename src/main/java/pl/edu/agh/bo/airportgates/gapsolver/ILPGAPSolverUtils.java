@@ -32,7 +32,7 @@ class ILPGAPSolverUtils {
         for (Flight iFlight : flights) {
             int j = 0;
             for (Flight jFlight : flights) {
-                if(i == j || iFlight.isAtGateAfter(jFlight)) {
+                if (i == j || iFlight.isAtGateAfter(jFlight)) {
                     j++;
                     continue;
                 }
@@ -187,7 +187,7 @@ class ILPGAPSolverUtils {
 
             int j = 0;
             for (Flight jFlight : flights) {
-                if(i == j || iFlight.isAtGateAfter(jFlight)) {
+                if (i == j || iFlight.isAtGateAfter(jFlight)) {
                     j++;
                     continue;
                 }
@@ -259,7 +259,7 @@ class ILPGAPSolverUtils {
         for (Flight iFlight : flights) {
             int j = 0;
             for (Flight jFlight : flights) {
-                if(i == j || iFlight.isAtGateAfter(jFlight)) {
+                if (i == j || iFlight.isAtGateAfter(jFlight)) {
                     j++;
                     continue;
                 }

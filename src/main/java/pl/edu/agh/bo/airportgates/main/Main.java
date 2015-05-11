@@ -1,7 +1,6 @@
 package pl.edu.agh.bo.airportgates.main;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import net.sf.javailp.SolverFactoryGurobi;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
