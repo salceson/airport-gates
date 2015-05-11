@@ -46,8 +46,6 @@ public class Main {
 
         final ImmutableList<Flight> flight = ImmutableList.of(loFlight1, klFlight1, loFlight2, klFlight2, loFlight3, klFlight3,
                 loFlight4, klFlight4, loFlight5, klFlight5, loFlight6, klFlight6);
-//
-//        final ImmutableList<Flight> flight = ImmutableList.of(loFlight1, loFlight5);
 
         final Map<Pair<Flight, Flight>, Integer> paxFlows = Maps.newHashMap();
         paxFlows.put(new Pair<>(loFlight1, loFlight5), 100);
