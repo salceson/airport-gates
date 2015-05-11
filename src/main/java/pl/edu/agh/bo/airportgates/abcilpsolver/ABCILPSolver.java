@@ -38,11 +38,12 @@ public class ABCILPSolver implements Solver {
     @Override
     public Result solve(Problem problem) throws ABCILPSolverException {
         checkParameters();
-        int poolSize, beesCount, modificationRate, iterations, lowerBound, upperBound;
+        int poolSize, beesCount, iterations, lowerBound, upperBound;
+        double modificationRate;
         try {
             poolSize = (int) parameters.get(THREAD_POOL_SIZE_PARAMETER);
             beesCount = (int) parameters.get(BEES_COUNT_PARAMETER);
-            modificationRate = (int) parameters.get(MODIFICATION_RATE_PARAMETER);
+            modificationRate = (double) parameters.get(MODIFICATION_RATE_PARAMETER);
             iterations = (int) parameters.get(ITERATIONS_PARAMETER);
             lowerBound = (int) parameters.get(LOWER_BOUND_PARAMETER);
             upperBound = (int) parameters.get(UPPER_BOUND_PARAMETER);
@@ -119,21 +120,21 @@ public class ABCILPSolver implements Solver {
         if (!parameters.containsKey(MODIFICATION_RATE_PARAMETER)) {
             throw new ABCILPSolverException("You need to specify the modification rate" +
                     " by setting (example):\n"
-                    + "solverFactory.setParameter(ABCILPSolver.MODIFICATION_RATE_PARAMETER, 5);\n"
+                    + "solverFactory.setParameter(ABCILPSolver.MODIFICATION_RATE_PARAMETER, 0.3);\n"
                     + "Please correct your solver configuration.");
         }
 
         if (!parameters.containsKey(LOWER_BOUND_PARAMETER)) {
             throw new ABCILPSolverException("You need to specify the lower bound for variables" +
                     " by setting (example):\n"
-                    + "solverFactory.setParameter(ABCILPSolver.ITERATIONS_PARAMETER, 1000);\n"
+                    + "solverFactory.setParameter(ABCILPSolver.LOWER_BOUND_PARAMETER, -1);\n"
                     + "Please correct your solver configuration.");
         }
 
         if (!parameters.containsKey(UPPER_BOUND_PARAMETER)) {
             throw new ABCILPSolverException("You need to specify the upper bound for variables" +
                     " by setting (example):\n"
-                    + "solverFactory.setParameter(ABCILPSolver.ITERATIONS_PARAMETER, 1000);\n"
+                    + "solverFactory.setParameter(ABCILPSolver.UPPER_BOUND_PARAMETER, 1);\n"
                     + "Please correct your solver configuration.");
         }
     }

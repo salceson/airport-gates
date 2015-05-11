@@ -13,7 +13,7 @@ import java.util.List;
  * @author Michał Ciołczyk
  */
 public class EmployedBeesPhase {
-    public static void run(Problem problem, int poolSize, int beesCount, int modificationRate, int dimension,
+    public static void run(Problem problem, int poolSize, int beesCount, double modificationRate, int dimension,
                            Solution[] currentSolutions, Solution[] newSolutions, int beesPerThread)
             throws ABCILPSolverException {
         List<EmployedBeesPhaseWorker> workers = new ArrayList<>();

@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 import net.sf.javailp.Problem;
 import pl.edu.agh.bo.airportgates.abcilpsolver.Solution;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -26,7 +29,7 @@ public class EmployedBeesPhaseWorker implements Runnable {
         int startBee = args.getStartBee();
         int endBee = args.getEndBee();
         int dimension = args.getDimension();
-        int modificationRate = args.getModificationRate();
+        double modificationRate = args.getModificationRate();
         Problem problem = args.getProblem();
         List<Object> variables = newArrayList(problem.getVariables());
         Solution[] currentSolutions = args.getSolutions();
@@ -34,14 +37,11 @@ public class EmployedBeesPhaseWorker implements Runnable {
 
         for (int i = startBee; i < endBee; i++) {
             Map<Object, Long> newSolutionVariables = new HashMap<>();
-            List<Object> variablesCopy = newArrayList(variables);
-            Collections.shuffle(variablesCopy);
-            List<Object> variablesToChange = variablesCopy.subList(0, modificationRate);
             for (Object variable : variables) {
                 long variableVal = currentSolutions[i].getVariables().get(variable);
                 int k = getK(i);
                 long variableKVal = currentSolutions[k].getVariables().get(variable);
-                if (variablesToChange.contains(variable)) {
+                if (random.nextDouble() < modificationRate) {
                     newSolutionVariables.put(variable, variableVal
                             + getPhi() * (variableVal - variableKVal));
                 } else {

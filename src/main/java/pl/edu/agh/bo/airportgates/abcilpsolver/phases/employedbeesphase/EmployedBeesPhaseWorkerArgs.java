@@ -17,6 +17,6 @@ public class EmployedBeesPhaseWorkerArgs {
     private final int endBee;
     private final int beesCount;
     private final int dimension;
-    private final int modificationRate;
+    private final double modificationRate;
     private final Problem problem;
 }
