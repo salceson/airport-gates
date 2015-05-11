@@ -20,6 +20,7 @@ public class Main {
         final GateAssignmentProblem gateAssignmentProblem = createProblem();
 
         final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryGurobi());
+//        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryLpSolve());
         final GateAssignmentResult gapResult = solver.solve(gateAssignmentProblem);
 
         System.out.println(gapResult.getCost());
