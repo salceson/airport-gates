@@ -11,6 +11,8 @@ import pl.edu.agh.bo.airportgates.util.MapBasedPaxFlowFunction;
 import pl.edu.agh.bo.airportgates.util.Pair;
 import pl.edu.agh.bo.airportgates.util.SimpleGateDistancesFunction;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,8 +63,10 @@ public class Main {
         final Flight klFlight5 = new Flight(200, FlightType.DEPARTURE, AircraftType.SMALL, "KL", "5", "MUC", "KRK");
         final Flight klFlight6 = new Flight(120, FlightType.ARRIVAL, AircraftType.SMALL, "KL", "6", "KRK", "MUC");
 
-        final ImmutableList<Flight> flight = ImmutableList.of(loFlight1, klFlight1, loFlight2, klFlight2, loFlight3, klFlight3,
+        final List<Flight> flights = Arrays.asList(loFlight1, klFlight1, loFlight2, klFlight2, loFlight3, klFlight3,
                 loFlight4, klFlight4, loFlight5, klFlight5, loFlight6, klFlight6);
+
+//        final List<Flight> flights = Arrays.asList(loFlight1, loFlight3, loFlight5);
 
         final Map<Pair<Flight, Flight>, Integer> paxFlows = Maps.newHashMap();
         paxFlows.put(new Pair<>(loFlight1, loFlight5), 100);
@@ -85,9 +89,13 @@ public class Main {
         final Gate gate9 = new Gate(9);
         final Gate gate10 = new Gate(10);
 
-        final ImmutableList<Gate> gates = ImmutableList.of(
-                gate1, gate2, gate3, gate4, gate5, gate6, gate7, gate8, gate9, gate10);
+        final List<Gate> gates = Arrays.asList(gate1, gate2, gate3, gate4, gate5, gate6, gate7, gate8, gate9, gate10);
 
-        return new GateAssignmentProblem(flight, gates, new MapBasedPaxFlowFunction(paxFlows), new SimpleGateDistancesFunction());
+        return new GateAssignmentProblem.Builder()
+                .withFlights(flights)
+                .withGates(gates)
+                .withFlightsFlowFunction(new MapBasedPaxFlowFunction(paxFlows))
+                .withGateDistancesFunction(new SimpleGateDistancesFunction())
+                .build();
     }
 }

@@ -32,6 +32,10 @@ class ILPGAPSolverUtils {
         for (Flight iFlight : flights) {
             int j = 0;
             for (Flight jFlight : flights) {
+                if(i == j || iFlight.isAtGateAfter(jFlight)) {
+                    j++;
+                    continue;
+                }
                 final long ijFlow = flowFunction.apply(new Pair<>(iFlight, jFlight));
                 int k = 0;
                 for (Gate kGate : gates) {
@@ -81,31 +85,51 @@ class ILPGAPSolverUtils {
 
         final List<Constraint> constraints = new ArrayList<>();
 
-        for (int i = 0; i < flights.size(); i++) {
-            for (int k = 0; k < gates.size(); k++) {
-                final Linear linear = new Linear();
-                final String xikVar = String.format("x_%d_%d", i, k);
-                linear.add(1, xikVar);
-                for (int j = 0; j < flights.size(); j++) {
-                    final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
-                    linear.add(-1, zijkVar);
+        {
+            int i = 0;
+            for (Flight iFlight : flights) {
+                for (int k = 0; k < gates.size(); k++) {
+                    final Linear linear = new Linear();
+                    final String xikVar = String.format("x_%d_%d", i, k);
+                    linear.add(1, xikVar);
+                    int j = 0;
+                    for (Flight jFlight : flights) {
+                        if (i == j || iFlight.isAtGateAfter(jFlight)) {
+                            j++;
+                            continue;
+                        }
+                        final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
+                        linear.add(-1, zijkVar);
+                        j++;
+                    }
+                    final Constraint constraint2 = new Constraint(getNextConstraintName(), linear, ">=", 0);
+                    constraints.add(constraint2);
                 }
-                final Constraint constraint2 = new Constraint(getNextConstraintName(), linear, ">=", 0);
-                constraints.add(constraint2);
+                i++;
             }
         }
 
-        for (int j = 0; j < flights.size(); j++) {
-            for (int k = 0; k < gates.size(); k++) {
-                final Linear linear = new Linear();
-                final String xjkVar = String.format("x_%d_%d", j, k);
-                linear.add(1, xjkVar);
-                for (int i = 0; i < flights.size(); i++) {
-                    final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
-                    linear.add(-1, zijkVar);
+        {
+            int j = 0;
+            for (Flight jFlight : flights) {
+                for (int k = 0; k < gates.size(); k++) {
+                    final Linear linear = new Linear();
+                    final String xjkVar = String.format("x_%d_%d", j, k);
+                    linear.add(1, xjkVar);
+                    int i = 0;
+                    for (Flight iFlight : flights) {
+                        if (i == j || iFlight.isAtGateAfter(jFlight)) {
+                            i++;
+                            continue;
+                        }
+                        final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
+                        linear.add(-1, zijkVar);
+                        i++;
+                    }
+                    final Constraint constraint3 = new Constraint(getNextConstraintName(), linear, ">=", 0);
+                    constraints.add(constraint3);
                 }
-                final Constraint constraint3 = new Constraint(getNextConstraintName(), linear, ">=", 0);
-                constraints.add(constraint3);
+                j++;
             }
         }
 
@@ -126,11 +150,20 @@ class ILPGAPSolverUtils {
                 linear.add(1, xlkVar);
             }
 
-            for (int i = 0; i < flights.size(); i++) {
-                for (int j = 0; j < flights.size(); j++) {
+
+            int i = 0;
+            for (Flight iFlight : flights) {
+                int j = 0;
+                for (Flight jFlight : flights) {
+                    if (i == j || iFlight.isAtGateAfter(jFlight)) {
+                        j++;
+                        continue;
+                    }
                     final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
                     linear.add(-1, zijkVar);
+                    j++;
                 }
+                i++;
             }
 
             final Constraint constraint4 = new Constraint(getNextConstraintName(), linear, "<=", 1);
@@ -150,12 +183,17 @@ class ILPGAPSolverUtils {
         int i = 0;
         for (Flight iFlight : flights) {
             final long iOperTime = iFlight.getOperationTime();
-            final long iGateTime = iFlight.getAircraftType().getTimeAtGate();
+            final long iGateTime = iFlight.getAircraftType().getGateOccupationTime();
 
             int j = 0;
             for (Flight jFlight : flights) {
+                if(i == j || iFlight.isAtGateAfter(jFlight)) {
+                    j++;
+                    continue;
+                }
+
                 final long jOperTime = jFlight.getOperationTime();
-                final long jGateTime = jFlight.getAircraftType().getTimeAtGate();
+                final long jGateTime = jFlight.getAircraftType().getGateOccupationTime();
 
                 for (int k = 0; k < gates.size(); k++) {
                     final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
@@ -217,8 +255,15 @@ class ILPGAPSolverUtils {
 
         final List<Constraint> constraints = new ArrayList<>();
 
-        for (int i = 0; i < flights.size(); i++) {
-            for (int j = 0; j < flights.size(); j++) {
+        int i = 0;
+        for (Flight iFlight : flights) {
+            int j = 0;
+            for (Flight jFlight : flights) {
+                if(i == j || iFlight.isAtGateAfter(jFlight)) {
+                    j++;
+                    continue;
+                }
+
                 for (int k = 0; k < gates.size(); k++) {
                     final String xikVar = String.format("x_%d_%d", i, k);
 
@@ -234,7 +279,9 @@ class ILPGAPSolverUtils {
 //                        constraints.add(createConstraint7811lower(yVar));
                     }
                 }
+                j++;
             }
+            i++;
         }
 
         return constraints;
@@ -245,27 +292,50 @@ class ILPGAPSolverUtils {
         final List<Gate> gates = gap.getGates();
 
         final List<Constraint> constraints = new ArrayList<>();
-        for (int i = 0; i < flights.size(); i++) {
-            for (int j = 0; j < flights.size(); j++) {
-                for (int k = 0; k < gates.size(); k++) {
-                    // z {0,1} constraints creation (7)
-                    final String zVar = String.format("z_%d_%d_%d", i, j, k);
-                    constraints.add(createConstraint7811lower(zVar));
-                    constraints.add(createConstraint7811upper(zVar));
+
+        {
+            int i = 0;
+            for (Flight iFlight : flights) {
+                int j = 0;
+                for (Flight jFlight : flights) {
+                    if (i == j || iFlight.isAtGateAfter(jFlight)) {
+                        j++;
+                        continue;
+                    }
+
+                    for (int k = 0; k < gates.size(); k++) {
+                        // z {0,1} constraints creation (7)
+                        final String zVar = String.format("z_%d_%d_%d", i, j, k);
+                        constraints.add(createConstraint7811lower(zVar));
+                        constraints.add(createConstraint7811upper(zVar));
+                    }
+                    j++;
                 }
+                i++;
             }
         }
 
-        for (int i = 0; i < flights.size(); i++) {
-            for (int j = 0; j < flights.size(); j++) {
-                for (int k = 0; k < gates.size(); k++) {
-                    for (int l = 0; l < gates.size(); l++) {
-                        final String yVar = String.format("y_%d_%d_%d_%d", i, j, k, l);
-                        // y {0,1} constraints creation (11)
-                        constraints.add(createConstraint7811upper(yVar));
-                        constraints.add(createConstraint7811lower(yVar));
+        {
+            int i = 0;
+            for (Flight iFlight : flights) {
+                int j = 0;
+                for (Flight jFlight : flights) {
+                    if (i == j || iFlight.isAtGateAfter(jFlight)) {
+                        j++;
+                        continue;
                     }
+
+                    for (int k = 0; k < gates.size(); k++) {
+                        for (int l = 0; l < gates.size(); l++) {
+                            final String yVar = String.format("y_%d_%d_%d_%d", i, j, k, l);
+                            // y {0,1} constraints creation (11)
+                            constraints.add(createConstraint7811upper(yVar));
+                            constraints.add(createConstraint7811lower(yVar));
+                        }
+                    }
+                    j++;
                 }
+                i++;
             }
         }
 
@@ -315,22 +385,43 @@ class ILPGAPSolverUtils {
 
         final Set<String> variables = new HashSet<>();
 
-        for (int i = 0; i < flights.size(); i++) {
-            for (int j = 0; j < flights.size(); j++) {
+//        for (int i = 0; i < flights.size(); i++) {
+//            for (int j = 0; j < flights.size(); j++) {
+        {
+            int i = 0;
+            for (Flight iFlight : flights) {
                 for (int k = 0; k < gates.size(); k++) {
                     final String xikVar = String.format("x_%d_%d", i, k);
                     variables.add(xikVar);
-
-                    final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
-                    variables.add(zijkVar);
-
-                    for (int l = 0; l < gates.size(); l++) {
-                        final String yVar = String.format("y_%d_%d_%d_%d", i, j, k, l);
-                        variables.add(yVar);
-                    }
                 }
+                i++;
             }
         }
+
+        {
+            int i = 0;
+            for (Flight iFlight : flights) {
+                int j = 0;
+                for (Flight jFlight : flights) {
+                    if (i == j || iFlight.isAtGateAfter(jFlight)) {
+                        j++;
+                        continue;
+                    }
+                    for (int k = 0; k < gates.size(); k++) {
+                        final String zijkVar = String.format("z_%d_%d_%d", i, j, k);
+                        variables.add(zijkVar);
+
+                        for (int l = 0; l < gates.size(); l++) {
+                            final String yVar = String.format("y_%d_%d_%d_%d", i, j, k, l);
+                            variables.add(yVar);
+                        }
+                    }
+                    j++;
+                }
+                i++;
+            }
+        }
+
 
         return variables;
     }

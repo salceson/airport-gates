@@ -11,5 +11,5 @@ public enum AircraftType {
     SMALL(40), LARGE(60);
 
     @Getter
-    private final int timeAtGate;
+    private final int gateOccupationTime;
 }

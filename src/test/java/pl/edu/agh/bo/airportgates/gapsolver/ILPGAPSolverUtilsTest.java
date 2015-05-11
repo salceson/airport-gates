@@ -27,7 +27,12 @@ public class ILPGAPSolverUtilsTest {
 
         final ImmutableList<Gate> gates = ImmutableList.of(gate1, gate2);
 
-        final GateAssignmentProblem gap = new GateAssignmentProblem(flight, gates, new MockPAXFlowFunction(), new SimpleGateDistancesFunction());
+        final GateAssignmentProblem gap = new GateAssignmentProblem.Builder()
+                .withFlights(flight)
+                .withGates(gates)
+                .withFlightsFlowFunction(new MockPAXFlowFunction())
+                .withGateDistancesFunction(new SimpleGateDistancesFunction())
+                .build();
 
         //when
         final Linear result = ILPGAPSolverUtils.getObjectiveForProblem(gap);
