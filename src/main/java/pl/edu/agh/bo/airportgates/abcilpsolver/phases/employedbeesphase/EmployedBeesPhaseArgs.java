@@ -10,16 +10,16 @@ import pl.edu.agh.bo.airportgates.abcilpsolver.Solution;
  */
 @Data
 @Builder
-public class EmployedBeesPhaseWorkerArgs {
-    private final Solution[] solutions;
-    private final Solution[] newSolutions;
-    private final int startBee;
-    private final int endBee;
+public class EmployedBeesPhaseArgs {
+    private final Problem problem;
+    private final int poolSize;
     private final int beesCount;
-    private final int dimension;
     private final double modificationRate;
     private final double searchRange;
-    private final Problem problem;
+    private final int dimension;
+    private final Solution[] currentSolutions;
+    private final Solution[] newSolutions;
+    private final int beesPerThread;
     private final int lowerBound;
     private final int upperBound;
 }

@@ -33,16 +33,28 @@ public class EmployedBeesPhaseWorker implements Runnable {
         List<Object> variables = newArrayList(problem.getVariables());
         Solution[] currentSolutions = args.getSolutions();
         Solution[] newSolutions = args.getNewSolutions();
+        int lowerBound = args.getLowerBound();
+        int upperBound = args.getUpperBound();
 
         for (int i = startBee; i < endBee; i++) {
             Map<Object, Long> newSolutionVariables = new HashMap<>();
             for (Object variable : variables) {
                 long variableVal = currentSolutions[i].getVariables().get(variable);
+
                 int k = getK(i);
                 long variableKVal = currentSolutions[k].getVariables().get(variable);
+
                 if (random.nextDouble() < modificationRate) {
-                    newSolutionVariables.put(variable, variableVal
-                            + Math.round(getPhi(a) * (variableVal - variableKVal)));
+                    long newVal = variableVal + Math.round(getPhi(a) * (variableVal - variableKVal));
+
+                    if (newVal > upperBound) {
+                        newVal = upperBound;
+                    }
+                    if (newVal < lowerBound) {
+                        newVal = lowerBound;
+                    }
+
+                    newSolutionVariables.put(variable, newVal);
                 } else {
                     newSolutionVariables.put(variable, variableVal);
                 }

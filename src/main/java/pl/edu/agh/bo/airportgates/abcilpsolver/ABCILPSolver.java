@@ -6,6 +6,7 @@ import net.sf.javailp.ResultImpl;
 import net.sf.javailp.Solver;
 import pl.edu.agh.bo.airportgates.abcilpsolver.exceptions.ABCILPSolverException;
 import pl.edu.agh.bo.airportgates.abcilpsolver.phases.employedbeesphase.EmployedBeesPhase;
+import pl.edu.agh.bo.airportgates.abcilpsolver.phases.employedbeesphase.EmployedBeesPhaseArgs;
 
 import java.util.*;
 
@@ -74,8 +75,21 @@ public class ABCILPSolver implements Solver {
 
         //Main loop
         for (int cycle = 1; cycle <= iterations; cycle++) {
-            EmployedBeesPhase.run(problem, poolSize, beesCount, modificationRate, searchRange,
-                    dimension, currentSolutions, newSolutions, beesPerThread);
+            EmployedBeesPhase.run(
+                    EmployedBeesPhaseArgs.builder()
+                            .problem(problem)
+                            .poolSize(poolSize)
+                            .beesCount(beesCount)
+                            .modificationRate(modificationRate)
+                            .searchRange(searchRange)
+                            .dimension(dimension)
+                            .currentSolutions(currentSolutions)
+                            .newSolutions(newSolutions)
+                            .beesPerThread(beesPerThread)
+                            .lowerBound(lowerBound)
+                            .upperBound(upperBound)
+                            .build()
+            );
 
             newSolutions = new Solution[beesCount];
         }
@@ -102,6 +116,7 @@ public class ABCILPSolver implements Solver {
             throw new ABCILPSolverException("You need to specify the thread pool" +
                     " by setting (example):\n"
                     + "solverFactory.setParameter(ABCILPSolver.THREAD_POOL_SIZE_PARAMETER, 4);\n"
+                    + "Expected type: int.\n"
                     + "Please correct your solver configuration.");
         }
 
@@ -109,6 +124,7 @@ public class ABCILPSolver implements Solver {
             throw new ABCILPSolverException("You need to specify the bees count" +
                     " by setting (example):\n"
                     + "solverFactory.setParameter(ABCILPSolver.BEES_COUNT_PARAMETER, 20);\n"
+                    + "Expected type: int.\n"
                     + "Please correct your solver configuration.");
         }
 
@@ -116,6 +132,7 @@ public class ABCILPSolver implements Solver {
             throw new ABCILPSolverException("You need to specify the iterations number" +
                     " by setting (example):\n"
                     + "solverFactory.setParameter(ABCILPSolver.ITERATIONS_PARAMETER, 1000);\n"
+                    + "Expected type: int.\n"
                     + "Please correct your solver configuration.");
         }
 
@@ -123,6 +140,7 @@ public class ABCILPSolver implements Solver {
             throw new ABCILPSolverException("You need to specify the modification rate" +
                     " by setting (example):\n"
                     + "solverFactory.setParameter(ABCILPSolver.MODIFICATION_RATE_PARAMETER, 0.3);\n"
+                    + "Expected type: double.\n"
                     + "Please correct your solver configuration.");
         }
 
@@ -130,20 +148,23 @@ public class ABCILPSolver implements Solver {
             throw new ABCILPSolverException("You need to specify the search range" +
                     " by setting (example):\n"
                     + "solverFactory.setParameter(ABCILPSolver.SEARCH_RANGE_PARAMETER, 1.0);\n"
+                    + "Expected type: double.\n"
                     + "Please correct your solver configuration.");
         }
 
         if (!parameters.containsKey(LOWER_BOUND_PARAMETER)) {
             throw new ABCILPSolverException("You need to specify the lower bound for variables" +
                     " by setting (example):\n"
-                    + "solverFactory.setParameter(ABCILPSolver.LOWER_BOUND_PARAMETER, -1);\n"
+                    + "solverFactory.setParameter(ABCILPSolver.LOWER_BOUND_PARAMETER, lowerBoundariesArray);\n"
+                    + "Expected type: int[].\n"
                     + "Please correct your solver configuration.");
         }
 
         if (!parameters.containsKey(UPPER_BOUND_PARAMETER)) {
             throw new ABCILPSolverException("You need to specify the upper bound for variables" +
                     " by setting (example):\n"
-                    + "solverFactory.setParameter(ABCILPSolver.UPPER_BOUND_PARAMETER, 1);\n"
+                    + "solverFactory.setParameter(ABCILPSolver.UPPER_BOUND_PARAMETER, upperBoundariesArray);\n"
+                    + "Expected type: int[].\n"
                     + "Please correct your solver configuration.");
         }
     }

@@ -13,9 +13,18 @@ import java.util.List;
  * @author Michał Ciołczyk
  */
 public class EmployedBeesPhase {
-    public static void run(Problem problem, int poolSize, int beesCount, double modificationRate, double searchRange,
-                           int dimension, Solution[] currentSolutions, Solution[] newSolutions, int beesPerThread)
-            throws ABCILPSolverException {
+    public static void run(EmployedBeesPhaseArgs args) throws ABCILPSolverException {
+        Problem problem = args.getProblem();
+        int poolSize = args.getPoolSize();
+        int beesCount = args.getBeesCount();
+        double modificationRate = args.getModificationRate();
+        double searchRange = args.getSearchRange();
+        int dimension = args.getDimension();
+        Solution[] currentSolutions = args.getCurrentSolutions();
+        Solution[] newSolutions = args.getNewSolutions();
+        int beesPerThread = args.getBeesPerThread();
+        int lowerBound = args.getLowerBound();
+        int upperBound = args.getUpperBound();
         List<EmployedBeesPhaseWorker> workers = new ArrayList<>();
 
         for (int threadNum = 0; threadNum < poolSize; threadNum++) {
@@ -30,6 +39,8 @@ public class EmployedBeesPhase {
                             .problem(problem)
                             .solutions(currentSolutions)
                             .newSolutions(newSolutions)
+                            .lowerBound(lowerBound)
+                            .upperBound(upperBound)
                             .build()
             );
             // We wait for the threads to finish below
@@ -49,6 +60,8 @@ public class EmployedBeesPhase {
                         .problem(problem)
                         .solutions(currentSolutions)
                         .newSolutions(newSolutions)
+                        .lowerBound(lowerBound)
+                        .upperBound(upperBound)
                         .build()
         ).run();
 
