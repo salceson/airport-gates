@@ -1,5 +1,6 @@
 package pl.edu.agh.bo.airportgates.gapsolver;
 
+import com.google.common.base.Optional;
 import net.sf.javailp.*;
 import pl.edu.agh.bo.airportgates.model.Flight;
 import pl.edu.agh.bo.airportgates.model.Gate;
@@ -25,7 +26,7 @@ public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
     }
 
     @Override
-    public GateAssignmentResult solve(GateAssignmentProblem gap) {
+    public Optional<GateAssignmentResult> solve(GateAssignmentProblem gap) {
         solverFactory.setParameter(Solver.VERBOSE, 0);
         solverFactory.setParameter(Solver.TIMEOUT, 100);
         final Problem ilpProblem = new Problem();
@@ -70,11 +71,14 @@ public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
         final Solver solver = solverFactory.get();
         final Result ilpResult = solver.solve(ilpProblem);
 
-        System.out.println(ilpResult);
         return createGAPResultFromILPResult(gap, ilpResult);
     }
 
-    private GateAssignmentResult createGAPResultFromILPResult(GateAssignmentProblem gap, Result ilpResult) {
+    private Optional<GateAssignmentResult> createGAPResultFromILPResult(GateAssignmentProblem gap, Result ilpResult) {
+        if (ilpResult == null) {
+            return Optional.absent();
+        }
+
         final List<Flight> flights = gap.getFlights();
         final List<Gate> gates = gap.getGates();
 
@@ -95,7 +99,7 @@ public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
             i++;
         }
 
-        return gapResultBuilder.build();
+        return Optional.of(gapResultBuilder.build());
     }
 
 

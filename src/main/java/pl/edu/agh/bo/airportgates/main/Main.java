@@ -1,5 +1,6 @@
 package pl.edu.agh.bo.airportgates.main;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import net.sf.javailp.SolverFactoryGurobi;
@@ -20,9 +21,22 @@ public class Main {
     public static void main(String[] args) {
         final GateAssignmentProblem gateAssignmentProblem = createProblem();
 
+        long startTime = System.currentTimeMillis();
+
         final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryGurobi());
 //        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryLpSolve());
-        final GateAssignmentResult gapResult = solver.solve(gateAssignmentProblem);
+        final Optional<GateAssignmentResult> gapResultOptional = solver.solve(gateAssignmentProblem);
+
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("Time elapsed: " + (endTime - startTime) / 1000.0 + " s");
+
+        if (!gapResultOptional.isPresent()) {
+            System.out.println("No suitable assignment found.");
+            return;
+        }
+
+        final GateAssignmentResult gapResult = gapResultOptional.get();
 
         System.out.println(gapResult.getCost());
 
@@ -67,8 +81,11 @@ public class Main {
         final Gate gate6 = new Gate(6);
         final Gate gate7 = new Gate(7);
         final Gate gate8 = new Gate(8);
+        final Gate gate9 = new Gate(9);
+        final Gate gate10 = new Gate(10);
 
-        final ImmutableList<Gate> gates = ImmutableList.of(gate1, gate2, gate3, gate4, gate5, gate6, gate7, gate8);
+        final ImmutableList<Gate> gates = ImmutableList.of(
+                gate1, gate2, gate3, gate4, gate5, gate6, gate7, gate8, gate9, gate10);
 
         return new GateAssignmentProblem(flight, gates, new MapBasedPaxFlowFunction(paxFlows), new SimpleGateDistancesFunction());
     }
