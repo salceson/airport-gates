@@ -44,6 +44,7 @@ public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
         try {
             FileWriter fw = new FileWriter("constraints.txt");
             for (Constraint constraint : constraints) {
+                fw.write(constraint.getName() + ": ");
                 fw.write(constraint.toString());
                 fw.write("\n");
                 ilpProblem.add(constraint);
