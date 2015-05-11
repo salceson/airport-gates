@@ -1,12 +1,14 @@
 package pl.edu.agh.bo.airportgates.model;
 
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 /**
  * @author Michał Ciołczyk
  */
-@Data
+@Value
+@RequiredArgsConstructor
 public class Gate {
-    private int number;
+    private final int number;
 }
