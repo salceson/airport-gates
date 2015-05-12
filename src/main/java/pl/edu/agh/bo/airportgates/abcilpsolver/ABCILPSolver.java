@@ -75,7 +75,7 @@ public class ABCILPSolver implements Solver {
     public static final int UPPER_BOUND_PARAMETER = 4007;
 
     private final Map<Object, Object> parameters = new HashMap<>();
-    private final Logger logger = LoggerFactory.getLogger(ABCILPSolver.class);
+    private final Logger logger = LoggerFactory.getLogger("ABCILP");
 
     /**
      * Sets the parameter o to value o1.

@@ -103,14 +103,13 @@ public class Main {
     }
 
     private static void setABCParams(SolverFactory solverFactory) {
-        solverFactory.setParameter(ABCILPSolver.ITERATIONS_PARAMETER, 1000);
+        solverFactory.setParameter(ABCILPSolver.ITERATIONS_PARAMETER, 100);
         solverFactory.setParameter(ABCILPSolver.LOWER_BOUND_PARAMETER, 0);
         solverFactory.setParameter(ABCILPSolver.UPPER_BOUND_PARAMETER, 1);
-        solverFactory.setParameter(ABCILPSolver.MODIFICATION_RATE_PARAMETER, 0.2);
+        solverFactory.setParameter(ABCILPSolver.MODIFICATION_RATE_PARAMETER, 0.5);
         solverFactory.setParameter(ABCILPSolver.THREAD_POOL_SIZE_PARAMETER, 8);
-        solverFactory.setParameter(ABCILPSolver.BEES_COUNT_PARAMETER, 50);
+        solverFactory.setParameter(ABCILPSolver.BEES_COUNT_PARAMETER, 100);
         solverFactory.setParameter(ABCILPSolver.SEARCH_RANGE_PARAMETER, 2.0);
-        solverFactory.setParameter(ABCILPSolver.ABANDONMENT_LIMIT_PARAMETER, 20);
-        solverFactory.setParameter(ABCILPSolver.VERBOSE, 10);
+        solverFactory.setParameter(ABCILPSolver.ABANDONMENT_LIMIT_PARAMETER, 15);
     }
 }
