@@ -25,6 +25,7 @@ public class OnlookerBeesPhase {
         double searchRange = args.getSearchRange();
         Problem problem = args.getProblem();
         int dimension = args.getDimension();
+        int[] tries = args.getTries();
 
         double[] prob = new double[beesCount];
 
@@ -121,9 +122,19 @@ public class OnlookerBeesPhase {
         }
 
         for (int i = 0; i < currentSolutions.length; i++) {
-            if (currentSolutions[i].compareTo(newSolutions[i]) < 0) {
+            if (wasSolutionImproved(currentSolutions[i], newSolutions[i])) {
                 currentSolutions[i] = newSolutions[i];
+            } else if (wasSolutionChanged(currentSolutions[i], newSolutions[i])) {
+                tries[i]++;
             }
         }
+    }
+
+    private static boolean wasSolutionChanged(Solution currentSolution, Solution newSolution) {
+        return !currentSolution.equals(newSolution);
+    }
+
+    private static boolean wasSolutionImproved(Solution currentSolution, Solution newSolution) {
+        return currentSolution.compareTo(newSolution) < 0;
     }
 }

@@ -24,4 +24,5 @@ public class OnlookerBeesPhaseArgs {
     private final int upperBound;
     private final int dimension;
     private final double searchRange;
+    private final int[] tries;
 }

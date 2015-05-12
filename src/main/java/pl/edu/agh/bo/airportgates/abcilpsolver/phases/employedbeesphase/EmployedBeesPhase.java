@@ -25,6 +25,7 @@ public class EmployedBeesPhase {
         int beesPerThread = args.getBeesPerThread();
         int lowerBound = args.getLowerBound();
         int upperBound = args.getUpperBound();
+        int[] tries = args.getTries();
         List<EmployedBeesPhaseWorker> workers = new ArrayList<>();
 
         for (int threadNum = 0; threadNum < poolSize; threadNum++) {
@@ -74,9 +75,15 @@ public class EmployedBeesPhase {
         }
 
         for (int i = 0; i < currentSolutions.length; i++) {
-            if (currentSolutions[i].compareTo(newSolutions[i]) < 0) {
+            if (wasSolutionImproved(currentSolutions[i], newSolutions[i])) {
                 currentSolutions[i] = newSolutions[i];
+            } else {
+                tries[i]++;
             }
         }
+    }
+
+    private static boolean wasSolutionImproved(Solution currentSolution, Solution newSolution) {
+        return currentSolution.compareTo(newSolution) < 0;
     }
 }

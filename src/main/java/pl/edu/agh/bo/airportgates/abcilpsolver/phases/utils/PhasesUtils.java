@@ -1,6 +1,14 @@
 package pl.edu.agh.bo.airportgates.abcilpsolver.phases.utils;
 
+import net.sf.javailp.Problem;
+import pl.edu.agh.bo.airportgates.abcilpsolver.Solution;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author Michał Ciołczyk
@@ -33,5 +41,24 @@ public class PhasesUtils {
         } while (k == bee);
 
         return k;
+    }
+
+    /**
+     * Creates random solution for problem.
+     *
+     * @param problem    ILP problem being solved
+     * @param lowerBound lower bound of the universe
+     * @param upperBound upper bound of the universe
+     * @param dimension  universe's dimension
+     * @return solution in universe
+     */
+    public static Solution createSolution(Problem problem, int lowerBound, int upperBound, int dimension) {
+        List<Object> variables = newArrayList(problem.getVariables());
+        Map<Object, Long> solutionMap = new HashMap<>();
+        for (Object variable : variables) {
+            long varNum = random.nextInt(upperBound - lowerBound + 1) - lowerBound;
+            solutionMap.put(variable, varNum);
+        }
+        return new Solution(dimension, solutionMap, problem);
     }
 }

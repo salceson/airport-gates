@@ -24,4 +24,5 @@ public class EmployedBeesPhaseArgs {
     private final int beesPerThread;
     private final int lowerBound;
     private final int upperBound;
+    private final int[] tries;
 }

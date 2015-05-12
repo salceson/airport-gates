@@ -1,5 +1,6 @@
 package pl.edu.agh.bo.airportgates.abcilpsolver;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.sf.javailp.Constraint;
@@ -13,6 +14,7 @@ import java.util.Map;
  * @author Michał Ciołczyk
  */
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class Solution implements Comparable<Solution> {
     public static final int NOT_SATISFIED_CONSTRAINT_PENALTY = 10000;
 

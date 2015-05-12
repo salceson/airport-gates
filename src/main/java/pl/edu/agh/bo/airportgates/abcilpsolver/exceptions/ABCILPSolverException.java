@@ -1,6 +1,9 @@
 package pl.edu.agh.bo.airportgates.abcilpsolver.exceptions;
 
 /**
+ * An exception that indicates that something went wrong during the executions of the
+ * ABC ILP algorithm.
+ *
  * @author Michał Ciołczyk
  */
 public class ABCILPSolverException extends RuntimeException {
