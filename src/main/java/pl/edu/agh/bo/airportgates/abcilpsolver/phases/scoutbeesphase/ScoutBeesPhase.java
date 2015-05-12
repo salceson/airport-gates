@@ -24,22 +24,23 @@ public class ScoutBeesPhase {
         int lowerBound = args.getLowerBound();
         int upperBound = args.getUpperBound();
         int dimension = args.getDimension();
+        int scoutBeesNumber = args.getScoutBeesNumber();
 
         for (int i = 0; i < beesCount; i++) {
             triesList.add(i, tries[i]);
         }
 
-        int max = Collections.max(triesList);
-
-        //Only one scout bee allowed
-        for (int i = 0; i < beesCount; i++) {
-            if (tries[i] == max) {
-                if (tries[i] > abandonmentLimit) {
-                    currentSolutions[i] = PhasesUtils.createSolution(problem, lowerBound, upperBound, dimension);
-                    currentSolutions[i].getFitness();
-                    tries[i] = 0;
+        for (int bee = 0; bee < scoutBeesNumber; bee++) {
+            int max = Collections.max(triesList);
+            for (int i = 0; i < beesCount; i++) {
+                if (tries[i] == max) {
+                    if (tries[i] > abandonmentLimit) {
+                        currentSolutions[i] = PhasesUtils.createSolution(problem, lowerBound, upperBound, dimension);
+                        currentSolutions[i].getFitness();
+                        tries[i] = 0;
+                    }
+                    break;
                 }
-                break;
             }
         }
     }

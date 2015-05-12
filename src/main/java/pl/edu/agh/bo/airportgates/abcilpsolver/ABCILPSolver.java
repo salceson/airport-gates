@@ -64,17 +64,23 @@ public class ABCILPSolver implements Solver {
      */
     public static final int ABANDONMENT_LIMIT_PARAMETER = 4005;
     /**
+     * Parameter that determines the number of scout bees.
+     * <p/>
+     * Expected type: int.
+     */
+    public static final int SCOUT_BEES_NUMBER_PARAMETER = 4006;
+    /**
      * Parameter that determines the lower bound of the universe.
      * <p/>
      * Expected type: int.
      */
-    public static final int LOWER_BOUND_PARAMETER = 4006;
+    public static final int LOWER_BOUND_PARAMETER = 4007;
     /**
      * Parameter that determines the upper bound of the universe.
      * <p/>
      * Expected type: int.
      */
-    public static final int UPPER_BOUND_PARAMETER = 4007;
+    public static final int UPPER_BOUND_PARAMETER = 4008;
 
     private final Map<Object, Object> parameters = new HashMap<>();
     private final Logger logger = LoggerFactory.getLogger("ABCILP");
@@ -110,7 +116,7 @@ public class ABCILPSolver implements Solver {
     @Override
     public Result solve(Problem problem) throws ABCILPSolverException {
         checkParameters();
-        int poolSize, beesCount, iterations, lowerBound, upperBound, abandonmentLimit;
+        int poolSize, beesCount, iterations, lowerBound, upperBound, abandonmentLimit, scoutBeesNumber;
         double modificationRate, searchRange;
         try {
             poolSize = (int) parameters.get(THREAD_POOL_SIZE_PARAMETER);
@@ -121,6 +127,7 @@ public class ABCILPSolver implements Solver {
             lowerBound = (int) parameters.get(LOWER_BOUND_PARAMETER);
             upperBound = (int) parameters.get(UPPER_BOUND_PARAMETER);
             abandonmentLimit = (int) parameters.get(ABANDONMENT_LIMIT_PARAMETER);
+            scoutBeesNumber = (int) parameters.get(SCOUT_BEES_NUMBER_PARAMETER);
         } catch (ClassCastException e) {
             throw new ABCILPSolverException("Please provide parameters in correct types.", e);
         }
@@ -219,6 +226,7 @@ public class ABCILPSolver implements Solver {
                             .lowerBound(lowerBound)
                             .abandonmentLimit(abandonmentLimit)
                             .problem(problem)
+                            .scoutBeesNumber(scoutBeesNumber)
                             .build()
             );
 
@@ -306,6 +314,14 @@ public class ABCILPSolver implements Solver {
             throw new ABCILPSolverException("You need to specify the abandonment limit" +
                     " by setting (example):\n"
                     + "solverFactory.setParameter(ABCILPSolver.ABANDONMENT_LIMIT_PARAMETER, 20);\n"
+                    + "Expected type: int.\n"
+                    + "Please correct your solver configuration.");
+        }
+
+        if (!parameters.containsKey(SCOUT_BEES_NUMBER_PARAMETER)) {
+            throw new ABCILPSolverException("You need to specify the scout bees' number" +
+                    " by setting (example):\n"
+                    + "solverFactory.setParameter(ABCILPSolver.SCOUT_BEES_NUMBER_PARAMETER, 20);\n"
                     + "Expected type: int.\n"
                     + "Please correct your solver configuration.");
         }

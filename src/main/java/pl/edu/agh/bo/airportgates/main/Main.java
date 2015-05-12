@@ -111,5 +111,6 @@ public class Main {
         solverFactory.setParameter(ABCILPSolver.BEES_COUNT_PARAMETER, 50);
         solverFactory.setParameter(ABCILPSolver.SEARCH_RANGE_PARAMETER, 2.0);
         solverFactory.setParameter(ABCILPSolver.ABANDONMENT_LIMIT_PARAMETER, 50);
+        solverFactory.setParameter(ABCILPSolver.SCOUT_BEES_NUMBER_PARAMETER, 20);
     }
 }

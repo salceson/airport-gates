@@ -19,4 +19,5 @@ public class ScoutBeesPhaseArgs {
     private final int upperBound;
     private final int abandonmentLimit;
     private final Problem problem;
+    private final int scoutBeesNumber;
 }
