@@ -163,9 +163,9 @@ public class ABCILPSolver implements Solver {
 
         int beesPerThread = beesCount / poolSize;
 
-        List<Solution> fsolutions = newArrayList(currentSolutions);
-        Collections.sort(fsolutions);
-        Solution totalBestSolution = fsolutions.get(0);
+        List<Solution> initialSolutions = newArrayList(currentSolutions);
+        Collections.sort(initialSolutions);
+        Solution totalBestSolution = initialSolutions.get(beesCount - 1);
 
         //Main loop
         for (int cycle = 1; cycle <= iterations; cycle++) {

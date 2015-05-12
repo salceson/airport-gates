@@ -7,7 +7,6 @@ import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolver;
 import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
 import pl.edu.agh.bo.airportgates.gapsolver.ABCGateAssignmentSolverImpl;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
-import pl.edu.agh.bo.airportgates.gapsolver.ILPGateAssignmentSolverImpl;
 import pl.edu.agh.bo.airportgates.model.*;
 import pl.edu.agh.bo.airportgates.util.MapBasedPaxFlowFunction;
 import pl.edu.agh.bo.airportgates.util.Pair;
@@ -68,10 +67,10 @@ public class Main {
         final Flight klFlight5 = new Flight(200, FlightType.DEPARTURE, AircraftType.SMALL, "KL", "5", "MUC", "KRK");
         final Flight klFlight6 = new Flight(120, FlightType.ARRIVAL, AircraftType.SMALL, "KL", "6", "KRK", "MUC");
 
-//        final List<Flight> flights = Arrays.asList(loFlight1, klFlight1, loFlight2, klFlight2, loFlight3, klFlight3,
-//                loFlight4, klFlight4, loFlight5, klFlight5, loFlight6, klFlight6);
-
-        final List<Flight> flights = Arrays.asList(loFlight1, loFlight2, loFlight3, loFlight4, loFlight5, loFlight6);
+        final List<Flight> flights = Arrays.asList(loFlight1, klFlight1, loFlight2, klFlight2, loFlight3, klFlight3,
+                loFlight4, klFlight4, loFlight5, klFlight5, loFlight6, klFlight6);
+//
+//        final List<Flight> flights = Arrays.asList(loFlight1, loFlight2, loFlight3, loFlight4, loFlight5, loFlight6);
 
         final Map<Pair<Flight, Flight>, Integer> paxFlows = Maps.newHashMap();
         paxFlows.put(new Pair<>(loFlight1, loFlight5), 100);
@@ -94,7 +93,7 @@ public class Main {
         final Gate gate9 = new Gate(9);
         final Gate gate10 = new Gate(10);
 
-        final List<Gate> gates = Arrays.asList(gate1, gate2, gate3, gate4/*, gate5, gate6, gate7, gate8, gate9, gate10*/);
+        final List<Gate> gates = Arrays.asList(gate1, gate2, gate3, gate4, gate5, gate6, gate7, gate8, gate9, gate10);
 
         return new GateAssignmentProblem.Builder()
                 .withFlights(flights)

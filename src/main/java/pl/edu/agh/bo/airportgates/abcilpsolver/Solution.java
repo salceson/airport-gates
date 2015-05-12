@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import net.sf.javailp.Constraint;
 import net.sf.javailp.OptType;
 import net.sf.javailp.Problem;
+import pl.edu.agh.bo.airportgates.util.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,14 @@ public class Solution implements Comparable<Solution> {
 
         int i = 0;
         for (Object variable : problem.getObjective().getVariables()) {
-            objective += variables.get(variable) * (long) objectiveCoefficients.get(i++);
+            if (variable instanceof Pair) {
+                Pair variablesPair = (Pair) variable;
+                objective += variables.get(variablesPair.getFirst())
+                        * variables.get(variablesPair.getSecond())
+                        * (long) objectiveCoefficients.get(i++);
+            } else {
+                objective += variables.get(variable) * (long) objectiveCoefficients.get(i++);
+            }
         }
 
         long penaltyCoefficient = (problem.getOptType() == OptType.MAX) ? -1 : 1;
