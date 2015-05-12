@@ -77,6 +77,7 @@ public class EmployedBeesPhase {
         for (int i = 0; i < currentSolutions.length; i++) {
             if (wasSolutionImproved(currentSolutions[i], newSolutions[i])) {
                 currentSolutions[i] = newSolutions[i];
+                tries[i] = 0;
             } else {
                 tries[i]++;
             }

@@ -275,8 +275,6 @@ class ILPGAPSolverUtils {
                         constraints.add(createConstraint89(yVar, xikVar));
                         constraints.add(createConstraint89(yVar, xjlVar));
                         constraints.add(createConstraint10(yVar, xikVar, xjlVar));
-//                        constraints.add(createConstraint7811upper(yVar));
-//                        constraints.add(createConstraint7811lower(yVar));
                     }
                 }
                 j++;
