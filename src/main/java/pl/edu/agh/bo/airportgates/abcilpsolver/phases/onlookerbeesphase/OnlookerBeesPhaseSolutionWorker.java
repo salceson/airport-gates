@@ -66,23 +66,23 @@ public class OnlookerBeesPhaseSolutionWorker implements Runnable {
                         newSolutionVariables.put(variable, variableVal);
                     }
                     newSolutions[i] = new Solution(dimension, newSolutionVariables, problem);
-
-                    //Invoke lazy evaluation of fitness - it'll be done quicker in multi threads
-                    newSolutions[i].getFitness();
                 }
+
+                //Invoke lazy evaluation of fitness - it'll be done quicker in multi threads
+                newSolutions[i].getFitness();
             }
         }
 
-        synchronized (finished) {
+        synchronized (this) {
             finished = true;
-            finished.notifyAll();
+            notifyAll();
         }
     }
 
     public void waitForFinish() throws InterruptedException {
-        synchronized (finished) {
+        synchronized (this) {
             while (!finished) {
-                finished.wait();
+                wait();
             }
         }
     }

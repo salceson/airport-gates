@@ -81,8 +81,7 @@ public class Solution implements Comparable<Solution> {
         long penaltyCoefficient = (problem.getOptType() == OptType.MAX) ? 1 : -1;
 
         for (Constraint constraint : problem.getConstraints()) {
-            objective = penaltyObjectiveIfConstraintNotValid(
-                    objective, penaltyCoefficient, constraint);
+            objective = penaltyObjectiveIfConstraintNotValid(objective, penaltyCoefficient, constraint);
         }
 
         objectiveValue = objective;
@@ -98,10 +97,22 @@ public class Solution implements Comparable<Solution> {
 
         int i = 0;
         for (Object variable : constraint.getLhs().getVariables()) {
-            constraintValue += variables.get(variable) * (long) constraintCoefficients.get(i++);
+            long coeff;
+            try {
+                coeff = (long) constraintCoefficients.get(i);
+            } catch (ClassCastException e) {
+                coeff = (int) constraintCoefficients.get(i);
+            }
+            i++;
+            constraintValue += variables.get(variable) * coeff;
         }
 
-        long constraintRightSide = (long) constraint.getRhs();
+        long constraintRightSide;
+        try {
+            constraintRightSide = (long) constraint.getRhs();
+        } catch (ClassCastException e) {
+            constraintRightSide = (int) constraint.getRhs();
+        }
 
         switch (constraint.getOperator()) {
             case EQ:

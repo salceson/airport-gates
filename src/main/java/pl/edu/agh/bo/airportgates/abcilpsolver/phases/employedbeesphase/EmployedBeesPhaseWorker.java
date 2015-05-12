@@ -6,11 +6,8 @@ import pl.edu.agh.bo.airportgates.abcilpsolver.Solution;
 import pl.edu.agh.bo.airportgates.abcilpsolver.phases.utils.PhasesUtils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * Worker for Employed Bees' Phase.
@@ -31,7 +28,6 @@ public class EmployedBeesPhaseWorker implements Runnable {
         double modificationRate = args.getModificationRate();
         double a = args.getSearchRange();
         Problem problem = args.getProblem();
-        List<Object> variables = newArrayList(problem.getVariables());
         Solution[] currentSolutions = args.getSolutions();
         Solution[] newSolutions = args.getNewSolutions();
         int lowerBound = args.getLowerBound();
@@ -40,7 +36,7 @@ public class EmployedBeesPhaseWorker implements Runnable {
 
         for (int i = startBee; i < endBee; i++) {
             Map<Object, Long> newSolutionVariables = new HashMap<>();
-            for (Object variable : variables) {
+            for (Object variable : problem.getVariables()) {
                 long variableVal = currentSolutions[i].getVariables().get(variable);
 
                 int k = PhasesUtils.getK(i, beesCount);
@@ -61,15 +57,15 @@ public class EmployedBeesPhaseWorker implements Runnable {
                     newSolutionVariables.put(variable, variableVal);
                 }
                 newSolutions[i] = new Solution(dimension, newSolutionVariables, problem);
-
-                //Invoke lazy evaluation of fitness - it'll be done quicker in multi threads
-                newSolutions[i].getFitness();
             }
+
+            //Invoke lazy evaluation of fitness - it'll be done quicker in multi threads
+            newSolutions[i].getFitness();
         }
 
-        synchronized (finished) {
+        synchronized (this) {
             finished = true;
-            finished.notifyAll();
+            notifyAll();
         }
     }
 
@@ -80,9 +76,9 @@ public class EmployedBeesPhaseWorker implements Runnable {
      * @throws InterruptedException
      */
     public void waitForFinish() throws InterruptedException {
-        synchronized (finished) {
+        synchronized (this) {
             while (!finished) {
-                finished.wait();
+                wait();
             }
         }
     }

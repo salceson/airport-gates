@@ -18,8 +18,6 @@ import pl.edu.agh.bo.airportgates.abcilpsolver.phases.scoutbeesphase.ScoutBeesPh
 
 import java.util.*;
 
-import static com.google.common.collect.Lists.newArrayList;
-
 /**
  * The Artificial Bees' Colony Integer Linear Programming Solver Algorithm.
  *
@@ -47,7 +45,7 @@ public class ABCILPSolver implements Solver {
     /**
      * Parameter that determines size of the neighbourhood that is looked at during calculating of new solutions.
      * <p/>
-     * Expected type: int.
+     * Expected type: double.
      */
     public static final int SEARCH_RANGE_PARAMETER = 4003;
     /**
@@ -131,9 +129,7 @@ public class ABCILPSolver implements Solver {
         } catch (ClassCastException ignored) {
         }
 
-        List<Object> variables = newArrayList(problem.getVariables());
-
-        int dimension = variables.size();
+        int dimension = problem.getVariablesCount();
 
         Solution[] currentSolutions = new Solution[beesCount];
         Solution[] newSolutions = new Solution[beesCount];

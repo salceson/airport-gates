@@ -4,11 +4,8 @@ import net.sf.javailp.Problem;
 import pl.edu.agh.bo.airportgates.abcilpsolver.Solution;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * @author Michał Ciołczyk
@@ -53,9 +50,8 @@ public class PhasesUtils {
      * @return solution in universe
      */
     public static Solution createSolution(Problem problem, int lowerBound, int upperBound, int dimension) {
-        List<Object> variables = newArrayList(problem.getVariables());
         Map<Object, Long> solutionMap = new HashMap<>();
-        for (Object variable : variables) {
+        for (Object variable : problem.getVariables()) {
             long varNum = random.nextInt(upperBound - lowerBound + 1) - lowerBound;
             solutionMap.put(variable, varNum);
         }

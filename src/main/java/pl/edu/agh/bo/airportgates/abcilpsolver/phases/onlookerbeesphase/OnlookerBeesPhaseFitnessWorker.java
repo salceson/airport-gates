@@ -26,9 +26,9 @@ public class OnlookerBeesPhaseFitnessWorker implements Runnable {
             fitness[i] = currentSolutions[i].getFitness();
         }
 
-        synchronized (finished) {
+        synchronized (this) {
             finished = true;
-            finished.notifyAll();
+            notifyAll();
         }
     }
 
@@ -38,9 +38,9 @@ public class OnlookerBeesPhaseFitnessWorker implements Runnable {
      * @throws InterruptedException
      */
     public void waitForFinish() throws InterruptedException {
-        synchronized (finished) {
+        synchronized (this) {
             while (!finished) {
-                finished.wait();
+                wait();
             }
         }
     }
