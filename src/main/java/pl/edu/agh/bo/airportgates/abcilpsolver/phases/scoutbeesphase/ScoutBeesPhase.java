@@ -36,6 +36,7 @@ public class ScoutBeesPhase {
             if (tries[i] == max) {
                 if (tries[i] > abandonmentLimit) {
                     currentSolutions[i] = PhasesUtils.createSolution(problem, lowerBound, upperBound, dimension);
+                    currentSolutions[i].getFitness();
                     tries[i] = 0;
                 }
                 break;
