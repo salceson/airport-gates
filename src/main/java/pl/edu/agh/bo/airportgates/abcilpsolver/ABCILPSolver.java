@@ -248,7 +248,7 @@ public class ABCILPSolver implements Solver {
             }
         }
 
-        if (totalBestSolution.isValid()) {
+//        if (totalBestSolution.isValid()) {
             Result result = new ResultImpl(totalBestSolution.getObjectiveValue());
 
             for (Map.Entry<Object, Long> variableEntry : totalBestSolution.getVariables().entrySet()) {
@@ -260,13 +260,13 @@ public class ABCILPSolver implements Solver {
             }
 
             return result;
-        }
-
-        if (verbose) {
-            logger.debug("Solution not found.");
-        }
-
-        return null;
+//        }
+//
+//        if (verbose) {
+//            logger.debug("Solution not found.");
+//        }
+//
+//        return null;
     }
 
     private void checkParameters() {

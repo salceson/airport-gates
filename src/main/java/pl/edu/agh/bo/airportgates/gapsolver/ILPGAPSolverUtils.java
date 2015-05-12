@@ -349,13 +349,13 @@ class ILPGAPSolverUtils {
         return constraints;
     }
 
-    private static Constraint createConstraint7811upper(String var) {
+    static Constraint createConstraint7811upper(String var) {
         final Linear linear = new Linear();
         linear.add(1, var);
         return new Constraint(getNextConstraintName(), linear, "<=", 1);
     }
 
-    private static Constraint createConstraint7811lower(String var) {
+    static Constraint createConstraint7811lower(String var) {
         final Linear linear = new Linear();
         linear.add(1, var);
         return new Constraint(getNextConstraintName(), linear, ">=", 0);
