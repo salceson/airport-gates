@@ -26,12 +26,13 @@ public class ScoutBeesPhase {
         int dimension = args.getDimension();
         int scoutBeesNumber = args.getScoutBeesNumber();
 
-        for (int i = 0; i < beesCount; i++) {
-            triesList.add(i, tries[i]);
-        }
-
         for (int bee = 0; bee < scoutBeesNumber; bee++) {
+            for (int i = 0; i < beesCount; i++) {
+                triesList.add(i, tries[i]);
+            }
+
             int max = Collections.max(triesList);
+
             for (int i = 0; i < beesCount; i++) {
                 if (tries[i] == max) {
                     if (tries[i] > abandonmentLimit) {
