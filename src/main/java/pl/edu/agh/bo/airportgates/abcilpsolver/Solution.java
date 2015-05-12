@@ -16,7 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 public class Solution implements Comparable<Solution> {
-    public static final int NOT_SATISFIED_CONSTRAINT_PENALTY = 10000;
+    public static final int NOT_SATISFIED_CONSTRAINT_PENALTY = 1000;
 
     private final int dimension;
     @Getter
@@ -34,7 +34,14 @@ public class Solution implements Comparable<Solution> {
 
     @Override
     public int compareTo(Solution o) {
-        return Double.compare(getFitness(), o.getFitness());
+        int comparison = Double.compare(getObjectiveValue(), o.getObjectiveValue());
+        switch (problem.getOptType()) {
+            case MIN:
+                return -comparison;
+            case MAX:
+                return comparison;
+        }
+        return 0;
     }
 
     public long getObjectiveValue() {
@@ -46,26 +53,27 @@ public class Solution implements Comparable<Solution> {
     }
 
     public double getFitness() {
-        if (objectiveValue == null) {
-            calculateObjectiveAndCheckIfValid();
-        }
-
-        switch (problem.getOptType()) {
-            case MIN:
-                if (objectiveValue >= 0) {
-                    return 1.0 / (1.0 + objectiveValue);
-                }
-
-                return 1.0 - objectiveValue;
-            case MAX:
-                if (objectiveValue <= 0) {
-                    return 1.0 / (1.0 - objectiveValue);
-                }
-
-                return 1.0 + objectiveValue;
-        }
-
-        return 0.0;
+//        if (objectiveValue == null) {
+//            calculateObjectiveAndCheckIfValid();
+//        }
+//
+//        switch (problem.getOptType()) {
+//            case MIN:
+//                if (objectiveValue >= 0) {
+//                    return 1.0 / (1.0 + objectiveValue);
+//                }
+//
+//                return 1.0 - objectiveValue;
+//            case MAX:
+//                if (objectiveValue <= 0) {
+//                    return 1.0 / (1.0 - objectiveValue);
+//                }
+//
+//                return 1.0 + objectiveValue;
+//        }
+//
+//        return 0.0;
+        return getObjectiveValue();
     }
 
     private void calculateObjectiveAndCheckIfValid() {
@@ -78,7 +86,7 @@ public class Solution implements Comparable<Solution> {
             objective += variables.get(variable) * (long) objectiveCoefficients.get(i++);
         }
 
-        long penaltyCoefficient = (problem.getOptType() == OptType.MAX) ? 1 : -1;
+        long penaltyCoefficient = (problem.getOptType() == OptType.MAX) ? -1 : 1;
 
         for (Constraint constraint : problem.getConstraints()) {
             objective = penaltyObjectiveIfConstraintNotValid(objective, penaltyCoefficient, constraint);

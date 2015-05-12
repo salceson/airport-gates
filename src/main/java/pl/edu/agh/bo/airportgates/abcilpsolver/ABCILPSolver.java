@@ -18,6 +18,8 @@ import pl.edu.agh.bo.airportgates.abcilpsolver.phases.scoutbeesphase.ScoutBeesPh
 
 import java.util.*;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 /**
  * The Artificial Bees' Colony Integer Linear Programming Solver Algorithm.
  *
@@ -154,6 +156,10 @@ public class ABCILPSolver implements Solver {
 
         int beesPerThread = beesCount / poolSize;
 
+        List<Solution> fsolutions = newArrayList(currentSolutions);
+        Collections.sort(fsolutions);
+        Solution totalBestSolution = fsolutions.get(0);
+
         //Main loop
         for (int cycle = 1; cycle <= iterations; cycle++) {
             if (verbose) {
@@ -215,16 +221,29 @@ public class ABCILPSolver implements Solver {
                             .problem(problem)
                             .build()
             );
+
+            List<Solution> solutions = Arrays.asList(currentSolutions);
+            Collections.sort(solutions);
+            Solution bestSolution = solutions.get(beesCount - 1);
+            Solution worstSolution = solutions.get(0);
+
+            if (bestSolution.compareTo(totalBestSolution) > 0) {
+                totalBestSolution = bestSolution;
+            }
+
+            if (cycle % 10 == 0) {
+                System.out.println(
+                        "Iteration " + cycle + ": Best (iteration): " + bestSolution.getObjectiveValue()
+                                + ", Worst (iteration): " + worstSolution.getObjectiveValue()
+                                + ", Best (TOTAL): " + totalBestSolution.getObjectiveValue()
+                );
+            }
         }
 
-        List<Solution> solutions = Arrays.asList(currentSolutions);
-        Collections.sort(solutions);
-        Solution bestSolution = solutions.get(0);
+        if (totalBestSolution.isValid()) {
+            Result result = new ResultImpl(totalBestSolution.getObjectiveValue());
 
-        if (bestSolution.isValid()) {
-            Result result = new ResultImpl(bestSolution.getObjectiveValue());
-
-            for (Map.Entry<Object, Long> variableEntry : bestSolution.getVariables().entrySet()) {
+            for (Map.Entry<Object, Long> variableEntry : totalBestSolution.getVariables().entrySet()) {
                 result.put(variableEntry.getKey(), variableEntry.getValue());
             }
 
