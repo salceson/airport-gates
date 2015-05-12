@@ -1,4 +1,4 @@
-package pl.edu.agh.bo.airportgates.abcilpsolver.phases.employedbeesphase;
+package pl.edu.agh.bo.airportgates.abcilpsolver.phases.onlookerbeesphase;
 
 import lombok.Builder;
 import lombok.Data;
@@ -6,22 +6,21 @@ import net.sf.javailp.Problem;
 import pl.edu.agh.bo.airportgates.abcilpsolver.Solution;
 
 /**
- * Arguments for Employeed Bees' Phase.
- *
  * @author Michał Ciołczyk
  */
 @Data
 @Builder
-public class EmployedBeesPhaseArgs {
-    private final Problem problem;
-    private final int poolSize;
+public class OnlookerBeesPhaseSolutionWorkerArgs {
     private final int beesCount;
+    private final int startBee;
+    private final int endBee;
     private final double modificationRate;
-    private final double searchRange;
-    private final int dimension;
     private final Solution[] currentSolutions;
     private final Solution[] newSolutions;
-    private final int beesPerThread;
+    private final double[] prob;
+    private final Problem problem;
     private final int lowerBound;
     private final int upperBound;
+    private final int dimension;
+    private final double searchRange;
 }

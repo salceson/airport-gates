@@ -6,6 +6,8 @@ import net.sf.javailp.Problem;
 import pl.edu.agh.bo.airportgates.abcilpsolver.Solution;
 
 /**
+ * Arguments for Employed Bees' Phase Workers.
+ *
  * @author Michał Ciołczyk
  */
 @Data

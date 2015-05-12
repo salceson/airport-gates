@@ -1,6 +1,6 @@
 package pl.edu.agh.bo.airportgates.abcilpsolver;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.sf.javailp.Constraint;
 import net.sf.javailp.OptType;
@@ -12,12 +12,12 @@ import java.util.Map;
 /**
  * @author Michał Ciołczyk
  */
-@Data
 @RequiredArgsConstructor
 public class Solution implements Comparable<Solution> {
     public static final int NOT_SATISFIED_CONSTRAINT_PENALTY = 10000;
 
     private final int dimension;
+    @Getter
     private final Map<Object, Long> variables;
     private final Problem problem;
     private Long objectiveValue = null;
@@ -32,13 +32,7 @@ public class Solution implements Comparable<Solution> {
 
     @Override
     public int compareTo(Solution o) {
-        switch (problem.getOptType()) {
-            case MAX:
-                return Long.compare(getObjectiveValue(), o.getObjectiveValue());
-            case MIN:
-                return -Long.compare(getObjectiveValue(), o.getObjectiveValue());
-        }
-        return 0;
+        return Double.compare(getFitness(), o.getFitness());
     }
 
     public long getObjectiveValue() {

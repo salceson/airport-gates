@@ -3,6 +3,7 @@ package pl.edu.agh.bo.airportgates.abcilpsolver.phases.employedbeesphase;
 import lombok.RequiredArgsConstructor;
 import net.sf.javailp.Problem;
 import pl.edu.agh.bo.airportgates.abcilpsolver.Solution;
+import pl.edu.agh.bo.airportgates.abcilpsolver.phases.utils.PhasesUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,17 +36,18 @@ public class EmployedBeesPhaseWorker implements Runnable {
         Solution[] newSolutions = args.getNewSolutions();
         int lowerBound = args.getLowerBound();
         int upperBound = args.getUpperBound();
+        int beesCount = args.getBeesCount();
 
         for (int i = startBee; i < endBee; i++) {
             Map<Object, Long> newSolutionVariables = new HashMap<>();
             for (Object variable : variables) {
                 long variableVal = currentSolutions[i].getVariables().get(variable);
 
-                int k = getK(i);
+                int k = PhasesUtils.getK(i, beesCount);
                 long variableKVal = currentSolutions[k].getVariables().get(variable);
 
                 if (random.nextDouble() < modificationRate) {
-                    long newVal = variableVal + Math.round(getPhi(a) * (variableVal - variableKVal));
+                    long newVal = variableVal + Math.round(PhasesUtils.getPhi(a) * (variableVal - variableKVal));
 
                     if (newVal > upperBound) {
                         newVal = upperBound;
@@ -59,40 +61,18 @@ public class EmployedBeesPhaseWorker implements Runnable {
                     newSolutionVariables.put(variable, variableVal);
                 }
                 newSolutions[i] = new Solution(dimension, newSolutionVariables, problem);
+
+                //Invoke lazy evaluation of fitness - it'll be done quicker in multi threads
+                newSolutions[i].getFitness();
             }
         }
 
         synchronized (finished) {
             finished = true;
+            finished.notifyAll();
         }
     }
 
-    /**
-     * Returns random number from range [-a, a] (phi_i_j).
-     *
-     * @param a determines search range
-     * @return number from range [-a, a]
-     */
-    private double getPhi(double a) {
-        return random.nextDouble() * 2 * a - a;
-    }
-
-    /**
-     * Returns random bee's index that is not the current bee.
-     *
-     * @param bee index of current bee
-     * @return index that is not bee
-     */
-    private int getK(int bee) {
-        int beesCount = args.getBeesCount();
-        int k;
-
-        do {
-            k = random.nextInt(beesCount);
-        } while (k == bee);
-
-        return k;
-    }
 
     /**
      * Waits for completion of the worker.

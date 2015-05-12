@@ -7,6 +7,8 @@ import net.sf.javailp.Solver;
 import pl.edu.agh.bo.airportgates.abcilpsolver.exceptions.ABCILPSolverException;
 import pl.edu.agh.bo.airportgates.abcilpsolver.phases.employedbeesphase.EmployedBeesPhase;
 import pl.edu.agh.bo.airportgates.abcilpsolver.phases.employedbeesphase.EmployedBeesPhaseArgs;
+import pl.edu.agh.bo.airportgates.abcilpsolver.phases.onlookerbeesphase.OnlookerBeesPhase;
+import pl.edu.agh.bo.airportgates.abcilpsolver.phases.onlookerbeesphase.OnlookerBeesPhaseArgs;
 
 import java.util.*;
 
@@ -88,6 +90,22 @@ public class ABCILPSolver implements Solver {
                             .beesPerThread(beesPerThread)
                             .lowerBound(lowerBound)
                             .upperBound(upperBound)
+                            .build()
+            );
+
+            OnlookerBeesPhase.run(
+                    OnlookerBeesPhaseArgs.builder()
+                            .beesCount(beesCount)
+                            .beesPerThread(beesPerThread)
+                            .poolSize(poolSize)
+                            .currentSolutions(currentSolutions)
+                            .newSolutions(newSolutions)
+                            .dimension(dimension)
+                            .lowerBound(lowerBound)
+                            .upperBound(upperBound)
+                            .modificationRate(modificationRate)
+                            .searchRange(searchRange)
+                            .problem(problem)
                             .build()
             );
 
