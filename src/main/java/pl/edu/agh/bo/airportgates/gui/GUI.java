@@ -12,35 +12,50 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 
 public class GUI extends JPanel implements ActionListener {
     static private final String newline = "\n";
-    private JButton openButton;
-    private JTextArea textArea;
+    private JButton openButton, startButton;
+    private JTextArea logTextArea;
+    private JTextField timeoutTextField;
+    private JLabel timeoutLabel;
     private JFileChooser fc;
     private static JFrame frame;
+    private SolverRunner solverRunner = new SolverRunner();
 
     public GUI() {
         super(new BorderLayout());
 
-        textArea = new JTextArea(5,20);
-        textArea.setMargin(new Insets(5, 5, 5, 5));
-        textArea.setEditable(false);
-        JScrollPane logScrollPane = new JScrollPane(textArea);
+        logTextArea = new JTextArea(5,20);
+        logTextArea.setMargin(new Insets(5, 5, 5, 5));
+        logTextArea.setEditable(false);
+        JScrollPane logScrollPane = new JScrollPane(logTextArea);
+
+        timeoutLabel = new JLabel("Timeout: ");
+        timeoutTextField = new JTextField("100");
 
         Path cwd = Paths.get(System.getProperty("user.dir"));
-        Path dataDir = Paths.get("src/main/java/pl/edu/agh/bo/airportgates/data");
-        Path dataPath = cwd.resolve(dataDir);
+        Path dataPath = cwd.resolve("data");
         fc = new JFileChooser(dataPath.toString());
 
         openButton = new JButton("Load a problem file");
         openButton.addActionListener(this);
+        startButton = new JButton("Start solving!");
+        startButton.addActionListener(this);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(openButton);
+
+        JPanel paramsPanel = new JPanel();
+        paramsPanel.add(timeoutLabel, 0);
+        paramsPanel.add(timeoutTextField, 1);
+        paramsPanel.add(startButton, 2);
+
         add(buttonPanel, BorderLayout.PAGE_START);
         add(logScrollPane, BorderLayout.CENTER);
+        add(paramsPanel, BorderLayout.PAGE_END);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -49,28 +64,44 @@ public class GUI extends JPanel implements ActionListener {
 
             if (retVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                textArea.append("Opening: " + file.getName() + "." + newline);
+                logTextArea.append("Opening: " + file.getName() + "." + newline);
                 GateAssignmentProblem problem = null;
                 try {
-                    problem = ProblemDataLoader.loadProblemFromFile(file);
+                    solverRunner.gateAssignmentProblem = ProblemDataLoader.loadProblemFromFile(file);
                 } catch (IOException ex) {
-                    textArea.append("Problem while loading file.");
+                    logTextArea.append("Problem while loading file.");
                     JOptionPane.showMessageDialog(frame, "Problem while loading file.");
+                    return;
                 } catch (InvalidFileFormatException e1) {
-                    textArea.append("Ivalid file format.");
+                    logTextArea.append("Ivalid file format.");
                     JOptionPane.showMessageDialog(frame, "Invalid file format.");
+                    return;
                 }
-
-                if (problem != null) {
-                    textArea.append("Problem loaded, starting to solve.");
-                    SolverRunner.runSolver(problem);
-                }
-
             } else {
-                textArea.append("Open command cancelled by user." + newline);
+                logTextArea.append("Open command cancelled by user." + newline);
             }
 
-            textArea.setCaretPosition(textArea.getDocument().getLength());
+            logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+        } else if (e.getSource() == startButton) {
+            if (solverRunner.gateAssignmentProblem == null) {
+                logTextArea.append("Data file not chosen.");
+                JOptionPane.showMessageDialog(frame, "You should choose a data file first.");
+                return;
+            }
+
+            int timeout = 100;
+            try {
+                timeout = Integer.parseInt(timeoutTextField.getText());
+                System.out.println("Timeout is: " + timeout);
+            }
+            catch (NumberFormatException ex) {
+                logTextArea.append("Malformed timeout.");
+                JOptionPane.showMessageDialog(frame, "Timeout has to be a number.");
+                return;
+            }
+
+            logTextArea.append("Problem loaded, starting to solve.");
+            solverRunner.runSolver();  // TODO do sth with the solution
         }
     }
 

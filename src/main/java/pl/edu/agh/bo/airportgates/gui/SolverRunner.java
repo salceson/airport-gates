@@ -10,7 +10,10 @@ import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
 
 public class SolverRunner {
-    public static void runSolver(GateAssignmentProblem gateAssignmentProblem) {
+
+    public GateAssignmentProblem gateAssignmentProblem;
+
+    public Optional<GateAssignmentResult> runSolver() {
 
         long startTime = System.currentTimeMillis();
 
@@ -23,17 +26,21 @@ public class SolverRunner {
 
         System.out.println("Time elapsed: " + (endTime - startTime) / 1000.0 + " s");
 
-        if (!gapResultOptional.isPresent()) {
-            System.out.println("No suitable assignment found.");
-            return;
-        }
+        return gapResultOptional;
 
-        final GateAssignmentResult gapResult = gapResultOptional.get();
+//        if (!gapResultOptional.isPresent()) {
+//            System.out.println("No suitable assignment found.");
+//            return Optional.absent();
+//        }
 
-        System.out.println(gapResult.getCost());
-
-        for (Gate gate : gapResult.getGateAssignments().keySet()) {
-            System.out.println(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate));
-        }
+//        final GateAssignmentResult gapResult = gapResultOptional.get();
+//
+//        System.out.println(gapResult.getCost());
+//
+//        for (Gate gate : gapResult.getGateAssignments().keySet()) {
+//            System.out.println(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate));
+//        }
+//
+//        return gapResult;
     }
 }
