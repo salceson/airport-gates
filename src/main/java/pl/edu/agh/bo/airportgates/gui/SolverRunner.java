@@ -3,6 +3,7 @@ package pl.edu.agh.bo.airportgates.gui;
 import com.google.common.base.Optional;
 import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
+import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolverParams;
 import pl.edu.agh.bo.airportgates.gapsolver.ILPGateAssignmentSolverImpl;
 import pl.edu.agh.bo.airportgates.model.Gate;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
@@ -11,7 +12,9 @@ import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
 public class SolverRunner {
 
+    // BUHAHAHAHAH.
     public GateAssignmentProblem gateAssignmentProblem;
+    public GateAssignmentSolverParams params;
 
     public Optional<GateAssignmentResult> runSolver() {
 
@@ -19,7 +22,7 @@ public class SolverRunner {
 
 //        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryGurobi());
 //        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryLpSolve());
-        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new ABCILPSolverFactory());
+        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new ABCILPSolverFactory(), params);
         final Optional<GateAssignmentResult> gapResultOptional = solver.solve(gateAssignmentProblem);
 
         long endTime = System.currentTimeMillis();

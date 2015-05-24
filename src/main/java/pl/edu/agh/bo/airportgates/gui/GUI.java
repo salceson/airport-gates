@@ -12,15 +12,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 
 public class GUI extends JPanel implements ActionListener {
     static private final String newline = "\n";
     private JButton openButton, startButton;
     private JTextArea logTextArea;
-    private JTextField timeoutTextField;
-    private JLabel timeoutLabel;
+    private JTextField timeoutTF, iterationsTF, modificationRateTF;
+    private JTextField threadPoolSizeTF, beesCountTF, abandonmentLimitTF, scoutBeesTF;
     private JFileChooser fc;
     private static JFrame frame;
     private SolverRunner solverRunner = new SolverRunner();
@@ -33,8 +32,20 @@ public class GUI extends JPanel implements ActionListener {
         logTextArea.setEditable(false);
         JScrollPane logScrollPane = new JScrollPane(logTextArea);
 
-        timeoutLabel = new JLabel("Timeout: ");
-        timeoutTextField = new JTextField("100");
+        JLabel timeoutLabel = new JLabel("Timeout: ");
+        timeoutTF = new JTextField("100");
+        JLabel iterationsLabel = new JLabel("Iterations: ");
+        iterationsTF = new JTextField("1000");
+        JLabel modificationRateLabel = new JLabel("Modification rate: ");
+        modificationRateTF = new JTextField("12.0");
+        JLabel threadPoolSizeLabel = new JLabel("Thread pool size: ");
+        threadPoolSizeTF = new JTextField("12");
+        JLabel beesCountLabel = new JLabel("Bees count: ");
+        beesCountTF = new JTextField("1234");
+        JLabel abandonmentLimiLabel = new JLabel("Abandonment limit: ");
+        abandonmentLimitTF = new JTextField("123");
+        JLabel scoutBeesLabel = new JLabel("Scout bees: ");
+        scoutBeesTF = new JTextField("321");
 
         Path cwd = Paths.get(System.getProperty("user.dir"));
         Path dataPath = cwd.resolve("data");
@@ -49,13 +60,26 @@ public class GUI extends JPanel implements ActionListener {
         buttonPanel.add(openButton);
 
         JPanel paramsPanel = new JPanel();
+        paramsPanel.setSize(500, 100);
         paramsPanel.add(timeoutLabel, 0);
-        paramsPanel.add(timeoutTextField, 1);
-        paramsPanel.add(startButton, 2);
+        paramsPanel.add(timeoutTF, 1);
+        paramsPanel.add(iterationsLabel, 2);
+        paramsPanel.add(iterationsTF, 3);
+        paramsPanel.add(modificationRateLabel, 4);
+        paramsPanel.add(modificationRateTF, 5);
+        paramsPanel.add(threadPoolSizeLabel, 6);
+        paramsPanel.add(threadPoolSizeTF, 7);
+        paramsPanel.add(beesCountLabel, 8);
+        paramsPanel.add(beesCountTF, 9);
+        paramsPanel.add(abandonmentLimiLabel, 10);
+        paramsPanel.add(abandonmentLimitTF, 11);
+        paramsPanel.add(scoutBeesLabel, 12);
+        paramsPanel.add(scoutBeesTF, 13);
+        paramsPanel.add(startButton, 14);
 
         add(buttonPanel, BorderLayout.PAGE_START);
         add(logScrollPane, BorderLayout.CENTER);
-        add(paramsPanel, BorderLayout.PAGE_END);
+        add(paramsPanel, BorderLayout.PAGE_END); // TODO wtf happens here with the dimensions...
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -82,6 +106,7 @@ public class GUI extends JPanel implements ActionListener {
             }
 
             logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+
         } else if (e.getSource() == startButton) {
             if (solverRunner.gateAssignmentProblem == null) {
                 logTextArea.append("Data file not chosen.");
@@ -89,16 +114,35 @@ public class GUI extends JPanel implements ActionListener {
                 return;
             }
 
-            int timeout = 100;
+            int timeout = 0;
+            int iterations = 0;
+            double modificationRate = 0;
+            int threadPoolSize = 0;
+            int beesCount = 0;
+            int abandomentLimit = 0;
+            int scoutBeesNumber = 0;
             try {
-                timeout = Integer.parseInt(timeoutTextField.getText());
-                System.out.println("Timeout is: " + timeout);
+                timeout = Integer.parseInt(timeoutTF.getText());
+                iterations = Integer.parseInt(iterationsTF.getText());
+                modificationRate = Integer.parseInt(modificationRateTF.getText());
+                threadPoolSize = Integer.parseInt(threadPoolSizeTF.getText());
+                beesCount = Integer.parseInt(beesCountTF.getText());
+                abandomentLimit = Integer.parseInt(abandonmentLimitTF.getText());
+                scoutBeesNumber = Integer.parseInt(scoutBeesTF.getText());
             }
             catch (NumberFormatException ex) {
-                logTextArea.append("Malformed timeout.");
-                JOptionPane.showMessageDialog(frame, "Timeout has to be a number.");
+                logTextArea.append("Malformed param.");
+                JOptionPane.showMessageDialog(frame, "Params have to be numbers.");
                 return;
             }
+
+            solverRunner.params.timeout = timeout;
+            solverRunner.params.iterations = iterations;
+            solverRunner.params.modificationRate = modificationRate;
+            solverRunner.params.threadPoolSize = threadPoolSize;
+            solverRunner.params.beesCount = beesCount;
+            solverRunner.params.abandomentLimit = abandomentLimit;
+            solverRunner.params.scoutBeesNumber = scoutBeesNumber;
 
             logTextArea.append("Problem loaded, starting to solve.");
             solverRunner.runSolver();  // TODO do sth with the solution
@@ -108,7 +152,7 @@ public class GUI extends JPanel implements ActionListener {
     public static void createAndShowGUI() {
         frame = new JFrame("Airport Gates Problem Solver");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(500, 300);
+        frame.setSize(500, 600);
         frame.add(new GUI());
         frame.setVisible(true);
     }

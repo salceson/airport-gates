@@ -20,15 +20,22 @@ import java.util.List;
 public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
 
     private final SolverFactory solverFactory;
+    private GateAssignmentSolverParams params;
 
     public ILPGateAssignmentSolverImpl(SolverFactory solverFactory) {
         this.solverFactory = solverFactory;
+        this.params = GateAssignmentSolverParams.defaultParams();
+    }
+
+    public ILPGateAssignmentSolverImpl(SolverFactory solverFactory, GateAssignmentSolverParams params) {
+        this.solverFactory = solverFactory;
+        this.params = params;
     }
 
     @Override
     public Optional<GateAssignmentResult> solve(GateAssignmentProblem gap) {
         solverFactory.setParameter(Solver.VERBOSE, 0);
-        solverFactory.setParameter(Solver.TIMEOUT, 100);
+        solverFactory.setParameter(Solver.TIMEOUT, params.timeout);
         final Problem ilpProblem = new Problem();
 
         final Linear objective = ILPGAPSolverUtils.getObjectiveForProblem(gap);
