@@ -1,42 +1,16 @@
-package pl.edu.agh.bo.airportgates.main;
+package pl.edu.agh.bo.airportgates.gui;
 
 import com.google.common.base.Optional;
 import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
-import pl.edu.agh.bo.airportgates.dataloader.InvalidFileFormatException;
-import pl.edu.agh.bo.airportgates.dataloader.ProblemDataLoader;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
 import pl.edu.agh.bo.airportgates.gapsolver.ILPGateAssignmentSolverImpl;
-import pl.edu.agh.bo.airportgates.gui.GUI;
 import pl.edu.agh.bo.airportgates.model.Gate;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
-import javax.swing.*;
-import java.io.IOException;
 
-/**
- * @author Michał Ciołczyk
- * @author Michał Janczykowski
- */
-public class Main {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                //UIManager.put("swing.boldMetal", Boolean.FALSE);
-                GUI.createAndShowGUI();
-            }
-        });
-    }
-
-    // keeping that one because... well because :)
-    public static void main_old(String[] args) {
-        final GateAssignmentProblem gateAssignmentProblem;
-        try {
-            gateAssignmentProblem = createProblem();
-        } catch (IOException | InvalidFileFormatException e) {
-            e.printStackTrace();
-            return;
-        }
+public class SolverRunner {
+    public static void runSolver(GateAssignmentProblem gateAssignmentProblem) {
 
         long startTime = System.currentTimeMillis();
 
@@ -61,9 +35,5 @@ public class Main {
         for (Gate gate : gapResult.getGateAssignments().keySet()) {
             System.out.println(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate));
         }
-    }
-
-    private static GateAssignmentProblem createProblem() throws IOException, InvalidFileFormatException {
-        return ProblemDataLoader.loadProblemFromFile("data/test2.txt");
     }
 }
