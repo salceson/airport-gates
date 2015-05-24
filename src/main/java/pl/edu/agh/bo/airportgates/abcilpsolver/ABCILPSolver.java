@@ -248,6 +248,8 @@ public class ABCILPSolver implements Solver {
             }
         }
 
+        System.out.println(totalBestSolution.isValid(true));
+
 //        if (totalBestSolution.isValid()) {
             Result result = new ResultImpl(totalBestSolution.getObjectiveValue());
 

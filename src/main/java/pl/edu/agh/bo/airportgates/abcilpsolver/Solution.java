@@ -17,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 public class Solution implements Comparable<Solution> {
-    public static final int NOT_SATISFIED_CONSTRAINT_PENALTY = 1000;
+    public static final int NOT_SATISFIED_CONSTRAINT_PENALTY = 10000;
 
     private final int dimension;
     @Getter
@@ -26,9 +26,9 @@ public class Solution implements Comparable<Solution> {
     private Long objectiveValue = null;
     private Boolean valid;
 
-    public boolean isValid() {
-        if (valid == null) {
-            calculateObjectiveAndCheckIfValid();
+    public boolean isValid(boolean print) {
+        if (valid == null || print) {
+            calculateObjectiveAndCheckIfValid(print);
         }
         return valid;
     }
@@ -47,7 +47,7 @@ public class Solution implements Comparable<Solution> {
 
     public long getObjectiveValue() {
         if (objectiveValue == null) {
-            calculateObjectiveAndCheckIfValid();
+            calculateObjectiveAndCheckIfValid(false);
         }
 
         return objectiveValue;
@@ -77,7 +77,7 @@ public class Solution implements Comparable<Solution> {
         return getObjectiveValue();
     }
 
-    private void calculateObjectiveAndCheckIfValid() {
+    private void calculateObjectiveAndCheckIfValid(boolean print) {
         List<Number> objectiveCoefficients = problem.getObjective().getCoefficients();
 
         long objective = 0;
@@ -97,7 +97,7 @@ public class Solution implements Comparable<Solution> {
         long penaltyCoefficient = (problem.getOptType() == OptType.MAX) ? -1 : 1;
 
         for (Constraint constraint : problem.getConstraints()) {
-            objective = penaltyObjectiveIfConstraintNotValid(objective, penaltyCoefficient, constraint);
+            objective = penaltyObjectiveIfConstraintNotValid(objective, penaltyCoefficient, constraint, print);
         }
 
         objectiveValue = objective;
@@ -107,7 +107,8 @@ public class Solution implements Comparable<Solution> {
         }
     }
 
-    private long penaltyObjectiveIfConstraintNotValid(long objective, long penaltyCoefficient, Constraint constraint) {
+    private long penaltyObjectiveIfConstraintNotValid(long objective, long penaltyCoefficient,
+                                                      Constraint constraint, boolean print) {
         List<Number> constraintCoefficients = constraint.getLhs().getCoefficients();
         long constraintValue = 0;
 
@@ -130,22 +131,33 @@ public class Solution implements Comparable<Solution> {
             constraintRightSide = (int) constraint.getRhs();
         }
 
+        long delta = Math.abs(constraintValue - constraintRightSide);
+
         switch (constraint.getOperator()) {
             case EQ:
                 if (constraintValue != constraintRightSide) {
-                    objective += penaltyCoefficient * NOT_SATISFIED_CONSTRAINT_PENALTY;
+                    objective += penaltyCoefficient * NOT_SATISFIED_CONSTRAINT_PENALTY * delta;
+                    if (print) {
+                        System.out.println(constraint);
+                    }
                     valid = false;
                 }
                 break;
             case GE:
                 if (constraintValue < constraintRightSide) {
-                    objective += penaltyCoefficient * NOT_SATISFIED_CONSTRAINT_PENALTY;
+                    objective += penaltyCoefficient * NOT_SATISFIED_CONSTRAINT_PENALTY * delta;
+                    if (print) {
+                        System.out.println(constraint);
+                    }
                     valid = false;
                 }
                 break;
             case LE:
                 if (constraintValue > constraintRightSide) {
-                    objective += penaltyCoefficient * NOT_SATISFIED_CONSTRAINT_PENALTY;
+                    objective += penaltyCoefficient * NOT_SATISFIED_CONSTRAINT_PENALTY * delta;
+                    if (print) {
+                        System.out.println(constraint);
+                    }
                     valid = false;
                 }
         }
