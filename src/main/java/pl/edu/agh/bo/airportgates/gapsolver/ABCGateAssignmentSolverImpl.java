@@ -20,9 +20,16 @@ import java.util.List;
 public class ABCGateAssignmentSolverImpl implements GateAssignmentSolver {
 
     private final SolverFactory solverFactory;
+    private GateAssignmentSolverParams params;
 
     public ABCGateAssignmentSolverImpl(SolverFactory solverFactory) {
         this.solverFactory = solverFactory;
+        this.params = GateAssignmentSolverParams.defaultParams();
+    }
+
+    public ABCGateAssignmentSolverImpl(SolverFactory solverFactory, GateAssignmentSolverParams params) {
+        this.solverFactory = solverFactory;
+        this.params = params;
     }
 
     @Override

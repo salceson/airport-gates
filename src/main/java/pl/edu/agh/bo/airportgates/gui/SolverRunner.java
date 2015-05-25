@@ -4,10 +4,9 @@ import com.google.common.base.Optional;
 import net.sf.javailp.SolverFactory;
 import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolver;
 import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
+import pl.edu.agh.bo.airportgates.gapsolver.ABCGateAssignmentSolverImpl;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolverParams;
-import pl.edu.agh.bo.airportgates.gapsolver.ILPGateAssignmentSolverImpl;
-import pl.edu.agh.bo.airportgates.model.Gate;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
@@ -40,7 +39,7 @@ public class SolverRunner {
         solverFactory.setParameter(ABCILPSolver.ABANDONMENT_LIMIT_PARAMETER, params.abandomentLimit);
         solverFactory.setParameter(ABCILPSolver.SCOUT_BEES_NUMBER_PARAMETER, params.scoutBeesNumber);
 
-        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(solverFactory, params);
+        final GateAssignmentSolver solver = new ABCGateAssignmentSolverImpl(solverFactory, params);
         final Optional<GateAssignmentResult> gapResultOptional = solver.solve(gateAssignmentProblem);
 
         long endTime = System.currentTimeMillis();
