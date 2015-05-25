@@ -4,16 +4,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Cleanup;
 import org.apache.commons.lang3.StringUtils;
-import pl.edu.agh.bo.airportgates.model.AircraftType;
-import pl.edu.agh.bo.airportgates.model.Flight;
-import pl.edu.agh.bo.airportgates.model.FlightType;
-import pl.edu.agh.bo.airportgates.model.Gate;
-import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
+import pl.edu.agh.bo.airportgates.model.*;
 import pl.edu.agh.bo.airportgates.util.MapBasedPaxFlowFunction;
 import pl.edu.agh.bo.airportgates.util.Pair;
 import pl.edu.agh.bo.airportgates.util.SimpleGateDistancesFunction;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
@@ -23,9 +20,16 @@ import java.util.Map;
  * @author Michal Janczykowski
  */
 public class ProblemDataLoader {
-
     public static GateAssignmentProblem loadProblemFromFile(String filepath) throws IOException, InvalidFileFormatException {
-        @Cleanup final FileReader fileReader = new FileReader(filepath);
+        return loadProblemFromFileAux(new FileReader(filepath));
+    }
+
+    public static GateAssignmentProblem loadProblemFromFile(File file) throws IOException, InvalidFileFormatException {
+        return loadProblemFromFileAux(new FileReader(file));
+    }
+
+    public static GateAssignmentProblem loadProblemFromFileAux(FileReader fr) throws IOException, InvalidFileFormatException {
+        @Cleanup final FileReader fileReader = fr;
         @Cleanup final BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         String line;
@@ -105,7 +109,7 @@ public class ProblemDataLoader {
             final Flight flight1 = flights.get(flight1Ind);
             final Flight flight2 = flights.get(flight2Ind);
 
-            paxFlows.put(new Pair<Flight, Flight>(flight1, flight2), flow);
+            paxFlows.put(new Pair<>(flight1, flight2), flow);
         }
 
         return new GateAssignmentProblem.Builder()
