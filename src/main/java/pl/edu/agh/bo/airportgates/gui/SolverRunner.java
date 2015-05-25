@@ -37,7 +37,7 @@ public class SolverRunner {
         solverFactory.setParameter(ABCILPSolver.THREAD_POOL_SIZE_PARAMETER, params.threadPoolSize);
         solverFactory.setParameter(ABCILPSolver.BEES_COUNT_PARAMETER, params.beesCount);
         solverFactory.setParameter(ABCILPSolver.SEARCH_RANGE_PARAMETER, 2.0);
-        solverFactory.setParameter(ABCILPSolver.ABANDONMENT_LIMIT_PARAMETER, params.abandomentLimit);
+        solverFactory.setParameter(ABCILPSolver.ABANDONMENT_LIMIT_PARAMETER, params.abandonmentLimit);
         solverFactory.setParameter(ABCILPSolver.SCOUT_BEES_NUMBER_PARAMETER, params.scoutBeesNumber);
 
         final GateAssignmentSolver solver = new ABCGateAssignmentSolverImpl(solverFactory, params);

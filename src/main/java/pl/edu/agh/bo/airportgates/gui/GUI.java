@@ -23,7 +23,7 @@ import java.nio.file.Paths;
 
 public class GUI extends JPanel implements ActionListener {
     static private final String newline = "\n";
-    private JButton openButton, startButton;
+    private JButton openButton, startButton, stopButton;
     //private JTextArea logTextArea;
     private JTextField timeoutTF, iterationsTF, modificationRateTF;
     private JTextField threadPoolSizeTF, beesCountTF, abandonmentLimitTF, scoutBeesTF;
@@ -32,6 +32,7 @@ public class GUI extends JPanel implements ActionListener {
     private SolverRunner solverRunner = new SolverRunner();
     private static XYSeries totalBestSeries, iterBestSeries, iterWorstSeries;
     private static int currIter = 1;
+    private static Thread runningThread = null;
 
     public GUI() {
         super(new BorderLayout());
@@ -67,6 +68,8 @@ public class GUI extends JPanel implements ActionListener {
         openButton.addActionListener(this);
         startButton = new JButton("Start solving!");
         startButton.addActionListener(this);
+        stopButton = new JButton("Stop solving!");
+        stopButton.addActionListener(this);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(openButton);
@@ -88,6 +91,7 @@ public class GUI extends JPanel implements ActionListener {
         paramsPanel.add(scoutBeesLabel, 12);
         paramsPanel.add(scoutBeesTF, 13);
         paramsPanel.add(startButton, 14);
+        paramsPanel.add(stopButton, 15);
 
         add(buttonPanel, BorderLayout.PAGE_START);
         //add(logScrollPane, BorderLayout.CENTER);
@@ -114,8 +118,6 @@ public class GUI extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(frame, "Invalid file format.");
                     return;
                 }
-            } else {
-//                logTextArea.append("Open command cancelled by user." + newline);
             }
 
 //            logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
@@ -132,7 +134,7 @@ public class GUI extends JPanel implements ActionListener {
             double modificationRate = 0;
             int threadPoolSize = 0;
             int beesCount = 0;
-            int abandomentLimit = 0;
+            int abandonmentLimit = 0;
             int scoutBeesNumber = 0;
             try {
                 timeout = Integer.parseInt(timeoutTF.getText());
@@ -140,7 +142,7 @@ public class GUI extends JPanel implements ActionListener {
                 modificationRate = Double.parseDouble(modificationRateTF.getText());
                 threadPoolSize = Integer.parseInt(threadPoolSizeTF.getText());
                 beesCount = Integer.parseInt(beesCountTF.getText());
-                abandomentLimit = Integer.parseInt(abandonmentLimitTF.getText());
+                abandonmentLimit = Integer.parseInt(abandonmentLimitTF.getText());
                 scoutBeesNumber = Integer.parseInt(scoutBeesTF.getText());
             }
             catch (NumberFormatException ex) {
@@ -155,19 +157,23 @@ public class GUI extends JPanel implements ActionListener {
             solverRunner.params.modificationRate = modificationRate;
             solverRunner.params.threadPoolSize = threadPoolSize;
             solverRunner.params.beesCount = beesCount;
-            solverRunner.params.abandomentLimit = abandomentLimit;
+            solverRunner.params.abandonmentLimit = abandonmentLimit;
             solverRunner.params.scoutBeesNumber = scoutBeesNumber;
 
 //            logTextArea.append("Problem loaded, starting to solve.");
-            new Thread(new Runnable() {
+            runningThread = new Thread(new Runnable() {
                 public void run() {
-                    solverRunner.runSolver();  // TODO do sth with the solution
                     totalBestSeries.clear();
                     iterBestSeries.clear();
                     iterWorstSeries.clear();
                     currIter = 1;
+                    solverRunner.runSolver();  // TODO do sth with the solution
                 }
-            }).start();
+            });
+            runningThread.start();
+        } else if (e.getSource() == stopButton) {
+            runningThread.stop();
+            runningThread = null;
         }
     }
 

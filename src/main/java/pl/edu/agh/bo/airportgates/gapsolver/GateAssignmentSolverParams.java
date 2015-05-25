@@ -7,7 +7,7 @@ public class GateAssignmentSolverParams {
     public double modificationRate;
     public int threadPoolSize;
     public int beesCount;
-    public int abandomentLimit;
+    public int abandonmentLimit;
     public int scoutBeesNumber;
 
     public GateAssignmentSolverParams(int timeout, int iterations, double modificationRate, int threadPoolSize,
@@ -17,7 +17,7 @@ public class GateAssignmentSolverParams {
         this.modificationRate = modificationRate;
         this.threadPoolSize = threadPoolSize;
         this.beesCount = beesCount;
-        this.abandomentLimit = abandomentLimit;
+        this.abandonmentLimit = abandomentLimit;
         this.scoutBeesNumber = scoutBeesNumber;
     }
 
