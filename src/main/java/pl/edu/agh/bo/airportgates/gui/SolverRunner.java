@@ -62,7 +62,7 @@ public class SolverRunner {
                 new FileOutputStream(filename), "utf-8"))) {
             writer.write("Cost: " + gapResult.getCost() + "\n");
             for (Gate gate : gapResult.getGateAssignments().keySet()) {
-                writer.write(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate));
+                writer.write(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate) + "\n");
             }
         } catch (Exception ex) {
             System.out.println("Error while writing to file.");
