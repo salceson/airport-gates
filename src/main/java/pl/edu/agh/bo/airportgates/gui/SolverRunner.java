@@ -12,7 +12,7 @@ import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
 import javax.swing.*;
-
+import java.io.*;
 
 public class SolverRunner {
 
@@ -51,6 +51,19 @@ public class SolverRunner {
 
         for (Gate gate : gapResult.getGateAssignments().keySet()) {
             System.out.println(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate));
+        }
+
+        // printing to file (name is auto-generated):
+        String filename = "gap_result_" + System.currentTimeMillis();
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(filename), "utf-8"))) {
+            writer.write("Cost: " + gapResult.getCost() + "\n");
+            for (Gate gate : gapResult.getGateAssignments().keySet()) {
+                writer.write(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate));
+            }
+        } catch (Exception ex) {
+            System.out.println("Error while writing to file.");
+            ex.printStackTrace();
         }
 
         AfterSolvingGUI.createAndShow(gapResult, (endTime - startTime) / 1000.0, window);
