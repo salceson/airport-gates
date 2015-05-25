@@ -19,10 +19,9 @@ public class Flight implements Comparable<Flight> {
      * @return operationTime - gateOccupationTime for DEPARTURE flights or operationTime + gateOccupationTime for ARRIVAL flights.
      */
     public long getTimeAtGate() {
-        if(flightType == FlightType.DEPARTURE) {
+        if (flightType == FlightType.DEPARTURE) {
             return operationTime - aircraftType.getGateOccupationTime();
-        }
-        else if(flightType == FlightType.ARRIVAL) {
+        } else if (flightType == FlightType.ARRIVAL) {
             return operationTime;
         }
 
@@ -36,7 +35,7 @@ public class Flight implements Comparable<Flight> {
 
     @Override
     public int compareTo(Flight o) {
-        return ((Long)getTimeAtGate()).compareTo((Long)o.getTimeAtGate());
+        return ((Long) getTimeAtGate()).compareTo((Long) o.getTimeAtGate());
     }
 
     public boolean isAtGateAfter(Flight o) {
