@@ -1,6 +1,8 @@
 package pl.edu.agh.bo.airportgates.gui;
 
 import com.google.common.base.Optional;
+import net.sf.javailp.SolverFactory;
+import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolver;
 import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolverParams;
@@ -26,7 +28,19 @@ public class SolverRunner {
 
 //        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryGurobi());
 //        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryLpSolve());
-        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new ABCILPSolverFactory(), params);
+
+        SolverFactory solverFactory = new ABCILPSolverFactory();
+        solverFactory.setParameter(ABCILPSolver.ITERATIONS_PARAMETER, params.iterations);
+        solverFactory.setParameter(ABCILPSolver.LOWER_BOUND_PARAMETER, 0);
+        solverFactory.setParameter(ABCILPSolver.UPPER_BOUND_PARAMETER, 1);
+        solverFactory.setParameter(ABCILPSolver.MODIFICATION_RATE_PARAMETER, params.modificationRate);
+        solverFactory.setParameter(ABCILPSolver.THREAD_POOL_SIZE_PARAMETER, params.threadPoolSize);
+        solverFactory.setParameter(ABCILPSolver.BEES_COUNT_PARAMETER, params.beesCount);
+        solverFactory.setParameter(ABCILPSolver.SEARCH_RANGE_PARAMETER, 2.0);
+        solverFactory.setParameter(ABCILPSolver.ABANDONMENT_LIMIT_PARAMETER, params.abandomentLimit);
+        solverFactory.setParameter(ABCILPSolver.SCOUT_BEES_NUMBER_PARAMETER, params.scoutBeesNumber);
+
+        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(solverFactory, params);
         final Optional<GateAssignmentResult> gapResultOptional = solver.solve(gateAssignmentProblem);
 
         long endTime = System.currentTimeMillis();

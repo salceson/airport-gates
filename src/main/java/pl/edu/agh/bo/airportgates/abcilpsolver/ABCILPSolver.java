@@ -15,6 +15,7 @@ import pl.edu.agh.bo.airportgates.abcilpsolver.phases.onlookerbeesphase.Onlooker
 import pl.edu.agh.bo.airportgates.abcilpsolver.phases.onlookerbeesphase.OnlookerBeesPhaseArgs;
 import pl.edu.agh.bo.airportgates.abcilpsolver.phases.scoutbeesphase.ScoutBeesPhase;
 import pl.edu.agh.bo.airportgates.abcilpsolver.phases.scoutbeesphase.ScoutBeesPhaseArgs;
+import pl.edu.agh.bo.airportgates.gui.GUI;
 
 import java.util.*;
 
@@ -239,12 +240,17 @@ public class ABCILPSolver implements Solver {
                 totalBestSolution = bestSolution;
             }
 
-            if (cycle % 10 == 0) {
+            if (cycle % 5 == 0) {
+                long iterBest = bestSolution.getObjectiveValue();
+                long iterWorst = worstSolution.getObjectiveValue();
+                long totalBest = totalBestSolution.getObjectiveValue();
                 System.out.println(
-                        "Iteration " + cycle + ": Best (iteration): " + bestSolution.getObjectiveValue()
-                                + ", Worst (iteration): " + worstSolution.getObjectiveValue()
-                                + ", Best (TOTAL): " + totalBestSolution.getObjectiveValue()
+                        "Iteration " + cycle + ": Best (iteration): " + iterBest
+                                + ", Worst (iteration): " + iterWorst
+                                + ", Best (TOTAL): " + totalBest
                 );
+
+                GUI.addCostsToChart(iterBest, iterWorst, totalBest);
             }
         }
 
