@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import net.sf.javailp.SolverFactoryGurobi;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
 import pl.edu.agh.bo.airportgates.gapsolver.ILPGateAssignmentSolverImpl;
+import pl.edu.agh.bo.airportgates.gui.GUI;
 import pl.edu.agh.bo.airportgates.model.*;
 import pl.edu.agh.bo.airportgates.util.MapBasedPaxFlowFunction;
 import pl.edu.agh.bo.airportgates.util.Pair;
@@ -21,6 +22,14 @@ import java.util.Map;
  */
 public class Main {
     public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                GUI.createAndShowGUI();
+            }
+        });
+    }
+
+    public static void main_old(String[] args) {
         final GateAssignmentProblem gateAssignmentProblem = createProblem();
 
         long startTime = System.currentTimeMillis();

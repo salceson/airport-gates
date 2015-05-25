@@ -12,6 +12,10 @@ import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
 public class SolverRunner {
 
+    public SolverRunner() {
+        params = GateAssignmentSolverParams.defaultParams();
+    }
+
     // BUHAHAHAHAH.
     public GateAssignmentProblem gateAssignmentProblem;
     public GateAssignmentSolverParams params;

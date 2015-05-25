@@ -2,6 +2,7 @@ package pl.edu.agh.bo.airportgates.gui;
 
 import pl.edu.agh.bo.airportgates.dataloader.InvalidFileFormatException;
 import pl.edu.agh.bo.airportgates.dataloader.ProblemDataLoader;
+import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolverParams;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 
 import javax.swing.*;
@@ -27,7 +28,7 @@ public class GUI extends JPanel implements ActionListener {
     public GUI() {
         super(new BorderLayout());
 
-        logTextArea = new JTextArea(5,20);
+        logTextArea = new JTextArea(25,20);
         logTextArea.setMargin(new Insets(5, 5, 5, 5));
         logTextArea.setEditable(false);
         JScrollPane logScrollPane = new JScrollPane(logTextArea);
@@ -60,7 +61,7 @@ public class GUI extends JPanel implements ActionListener {
         buttonPanel.add(openButton);
 
         JPanel paramsPanel = new JPanel();
-        paramsPanel.setSize(500, 100);
+        paramsPanel.setSize(500, 300);
         paramsPanel.add(timeoutLabel, 0);
         paramsPanel.add(timeoutTF, 1);
         paramsPanel.add(iterationsLabel, 2);
@@ -124,7 +125,7 @@ public class GUI extends JPanel implements ActionListener {
             try {
                 timeout = Integer.parseInt(timeoutTF.getText());
                 iterations = Integer.parseInt(iterationsTF.getText());
-                modificationRate = Integer.parseInt(modificationRateTF.getText());
+                modificationRate = Double.parseDouble(modificationRateTF.getText());
                 threadPoolSize = Integer.parseInt(threadPoolSizeTF.getText());
                 beesCount = Integer.parseInt(beesCountTF.getText());
                 abandomentLimit = Integer.parseInt(abandonmentLimitTF.getText());
@@ -136,6 +137,7 @@ public class GUI extends JPanel implements ActionListener {
                 return;
             }
 
+            //solverRunner.params = new GateAssignmentSolverParams();
             solverRunner.params.timeout = timeout;
             solverRunner.params.iterations = iterations;
             solverRunner.params.modificationRate = modificationRate;
@@ -152,8 +154,9 @@ public class GUI extends JPanel implements ActionListener {
     public static void createAndShowGUI() {
         frame = new JFrame("Airport Gates Problem Solver");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(500, 600);
+        frame.setSize(700, 800);
         frame.add(new GUI());
+        frame.pack();
         frame.setVisible(true);
     }
 }
