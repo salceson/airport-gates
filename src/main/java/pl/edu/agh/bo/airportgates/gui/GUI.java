@@ -9,7 +9,6 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import pl.edu.agh.bo.airportgates.dataloader.InvalidFileFormatException;
 import pl.edu.agh.bo.airportgates.dataloader.ProblemDataLoader;
-import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -101,13 +100,13 @@ public class GUI extends JPanel implements ActionListener {
         add(paramsPanel, BorderLayout.PAGE_END);
     }
 
+    @SuppressWarnings("deprecation")
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == openButton) {
             int retVal = fc.showOpenDialog(GUI.this);
 
             if (retVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                GateAssignmentProblem problem = null;
                 try {
                     solverRunner.gateAssignmentProblem = ProblemDataLoader.loadProblemFromFile(file);
                 } catch (IOException ex) {
@@ -158,7 +157,7 @@ public class GUI extends JPanel implements ActionListener {
                     iterBestSeries.clear();
                     iterWorstSeries.clear();
                     currIter = 1;
-                    solverRunner.runSolver();  // TODO do sth with the solution
+                    solverRunner.runSolver(frame);
                 }
             });
             runningThread.start();

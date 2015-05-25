@@ -11,6 +11,8 @@ import pl.edu.agh.bo.airportgates.model.Gate;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
+import javax.swing.*;
+
 
 public class SolverRunner {
 
@@ -21,7 +23,7 @@ public class SolverRunner {
     public GateAssignmentProblem gateAssignmentProblem;
     public GateAssignmentSolverParams params;
 
-    public Optional<GateAssignmentResult> runSolver() {
+    public Optional<GateAssignmentResult> runSolver(JFrame window) {
 
         long startTime = System.currentTimeMillis();
 
@@ -50,6 +52,8 @@ public class SolverRunner {
         for (Gate gate : gapResult.getGateAssignments().keySet()) {
             System.out.println(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate));
         }
+
+        AfterSolvingGUI.createAndShow(gapResult, (endTime - startTime) / 1000.0, window);
 
         return gapResultOptional;
     }
