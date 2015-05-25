@@ -1,0 +1,24 @@
+MUC                         //base airport
+8                           //number of gates
+12                          //number of flights
+100 LO 10 WAW MUC SMALL     //[time in mins] [airline code] [airline flight number] [from] [to] [aircraft type]
+180 LO 11 MUC WAW SMALL
+140 LO 12 KRK MUC SMALL
+220 LO 13 MUC KRK SMALL
+200 LO 7 MUC ORD LARGE
+100 LO 6 ORD MUC LARGE
+80 KL 1 SXM MUC LARGE
+205 KL 2 MUC SXM LARGE
+110 KL 3 AMS MUC SMALL
+190 KL 4 MUC AMS SMALL
+200 KL 5 MUC KRK SMALL
+120 KL 6 KRK MUC SMALL
+8                           //number of PAX flows entries
+0 4 100                     //[flight1] [flight2] [PAX count]
+2 4 60
+5 1 80
+5 3 90
+6 9 140
+6 10 50
+8 7 120
+11 7 40
