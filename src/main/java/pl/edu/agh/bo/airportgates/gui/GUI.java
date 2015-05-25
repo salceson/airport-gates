@@ -162,6 +162,10 @@ public class GUI extends JPanel implements ActionListener {
             new Thread(new Runnable() {
                 public void run() {
                     solverRunner.runSolver();  // TODO do sth with the solution
+                    totalBestSeries.clear();
+                    iterBestSeries.clear();
+                    iterWorstSeries.clear();
+                    currIter = 1;
                 }
             }).start();
         }
