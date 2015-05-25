@@ -337,16 +337,16 @@ public class ABCILPSolver implements Solver {
         if (!parameters.containsKey(LOWER_BOUND_PARAMETER)) {
             throw new ABCILPSolverException("You need to specify the lower bound for variables" +
                     " by setting (example):\n"
-                    + "solverFactory.setParameter(ABCILPSolver.LOWER_BOUND_PARAMETER, lowerBoundariesArray);\n"
-                    + "Expected type: int[].\n"
+                    + "solverFactory.setParameter(ABCILPSolver.LOWER_BOUND_PARAMETER, 0;\n"
+                    + "Expected type: int.\n"
                     + "Please correct your solver configuration.");
         }
 
         if (!parameters.containsKey(UPPER_BOUND_PARAMETER)) {
             throw new ABCILPSolverException("You need to specify the upper bound for variables" +
                     " by setting (example):\n"
-                    + "solverFactory.setParameter(ABCILPSolver.UPPER_BOUND_PARAMETER, upperBoundariesArray);\n"
-                    + "Expected type: int[].\n"
+                    + "solverFactory.setParameter(ABCILPSolver.UPPER_BOUND_PARAMETER, 1);\n"
+                    + "Expected type: int.\n"
                     + "Please correct your solver configuration.");
         }
     }

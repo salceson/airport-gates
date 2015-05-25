@@ -22,9 +22,7 @@ import java.nio.file.Paths;
 
 
 public class GUI extends JPanel implements ActionListener {
-    static private final String newline = "\n";
     private JButton openButton, startButton, stopButton;
-    //private JTextArea logTextArea;
     private JTextField timeoutTF, iterationsTF, modificationRateTF;
     private JTextField threadPoolSizeTF, beesCountTF, abandonmentLimitTF, scoutBeesTF;
     private JFileChooser fc;
@@ -37,26 +35,29 @@ public class GUI extends JPanel implements ActionListener {
     public GUI() {
         super(new BorderLayout());
 
-        //logTextArea = new JTextArea(25,20);
-        //logTextArea.setMargin(new Insets(5, 5, 5, 5));
-        //logTextArea.setEditable(false);
-        //JScrollPane logScrollPane = new JScrollPane(logTextArea);
         XYDataset ds = createDataset();
-        JFreeChart chart = ChartFactory.createXYLineChart("Iterations best", "Iteration", "Cost", ds, PlotOrientation.VERTICAL, true, true, false);
+        JFreeChart chart = ChartFactory.createXYLineChart("Iterations best", "Iteration", "Cost",
+                ds, PlotOrientation.VERTICAL, true, true, false);
         ChartPanel cp = new ChartPanel(chart);
 
         JLabel timeoutLabel = new JLabel("Timeout: ");
         timeoutTF = new JTextField("400");
+
         JLabel iterationsLabel = new JLabel("Iterations: ");
         iterationsTF = new JTextField("1000");
+
         JLabel modificationRateLabel = new JLabel("Modification rate: ");
         modificationRateTF = new JTextField("0.7");
+
         JLabel threadPoolSizeLabel = new JLabel("Thread pool size: ");
         threadPoolSizeTF = new JTextField("8");
+
         JLabel beesCountLabel = new JLabel("Bees count: ");
         beesCountTF = new JTextField("50");
+
         JLabel abandonmentLimiLabel = new JLabel("Abandonment limit: ");
         abandonmentLimitTF = new JTextField("50");
+
         JLabel scoutBeesLabel = new JLabel("Scout bees: ");
         scoutBeesTF = new JTextField("20");
 
@@ -66,8 +67,10 @@ public class GUI extends JPanel implements ActionListener {
 
         openButton = new JButton("Load a problem file");
         openButton.addActionListener(this);
+
         startButton = new JButton("Start solving!");
         startButton.addActionListener(this);
+
         stopButton = new JButton("Stop solving!");
         stopButton.addActionListener(this);
 
@@ -94,9 +97,8 @@ public class GUI extends JPanel implements ActionListener {
         paramsPanel.add(stopButton, 15);
 
         add(buttonPanel, BorderLayout.PAGE_START);
-        //add(logScrollPane, BorderLayout.CENTER);
         add(cp, BorderLayout.CENTER);
-        add(paramsPanel, BorderLayout.PAGE_END); // TODO wtf happens here with the dimensions...
+        add(paramsPanel, BorderLayout.PAGE_END);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -105,37 +107,29 @@ public class GUI extends JPanel implements ActionListener {
 
             if (retVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-//                logTextArea.append("Opening: " + file.getName() + "." + newline);
                 GateAssignmentProblem problem = null;
                 try {
                     solverRunner.gateAssignmentProblem = ProblemDataLoader.loadProblemFromFile(file);
                 } catch (IOException ex) {
-//                    logTextArea.append("Problem while loading file.");
                     JOptionPane.showMessageDialog(frame, "Problem while loading file.");
-                    return;
                 } catch (InvalidFileFormatException e1) {
-//                    logTextArea.append("Ivalid file format.");
                     JOptionPane.showMessageDialog(frame, "Invalid file format.");
-                    return;
                 }
             }
-
-//            logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
-
         } else if (e.getSource() == startButton) {
             if (solverRunner.gateAssignmentProblem == null) {
-//                logTextArea.append("Data file not chosen.");
                 JOptionPane.showMessageDialog(frame, "You should choose a data file first.");
                 return;
             }
 
-            int timeout = 0;
-            int iterations = 0;
-            double modificationRate = 0;
-            int threadPoolSize = 0;
-            int beesCount = 0;
-            int abandonmentLimit = 0;
-            int scoutBeesNumber = 0;
+            int timeout;
+            int iterations;
+            double modificationRate;
+            int threadPoolSize;
+            int beesCount;
+            int abandonmentLimit;
+            int scoutBeesNumber;
+
             try {
                 timeout = Integer.parseInt(timeoutTF.getText());
                 iterations = Integer.parseInt(iterationsTF.getText());
@@ -146,12 +140,10 @@ public class GUI extends JPanel implements ActionListener {
                 scoutBeesNumber = Integer.parseInt(scoutBeesTF.getText());
             }
             catch (NumberFormatException ex) {
-//                logTextArea.append("Malformed param.");
                 JOptionPane.showMessageDialog(frame, "Params have to be numbers.");
                 return;
             }
 
-            //solverRunner.params = new GateAssignmentSolverParams();
             solverRunner.params.timeout = timeout;
             solverRunner.params.iterations = iterations;
             solverRunner.params.modificationRate = modificationRate;
@@ -160,7 +152,6 @@ public class GUI extends JPanel implements ActionListener {
             solverRunner.params.abandonmentLimit = abandonmentLimit;
             solverRunner.params.scoutBeesNumber = scoutBeesNumber;
 
-//            logTextArea.append("Problem loaded, starting to solve.");
             runningThread = new Thread(new Runnable() {
                 public void run() {
                     totalBestSeries.clear();
