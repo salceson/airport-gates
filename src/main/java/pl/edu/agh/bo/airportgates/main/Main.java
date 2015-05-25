@@ -1,26 +1,18 @@
 package pl.edu.agh.bo.airportgates.main;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
-import net.sf.javailp.SolverFactoryGurobi;
-import net.sf.javailp.SolverFactoryLpSolve;
-import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
-import pl.edu.agh.bo.airportgates.dataloader.InvalidFileFormatException;
-import pl.edu.agh.bo.airportgates.dataloader.ProblemDataLoader;
 import net.sf.javailp.SolverFactory;
 import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolver;
 import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
+import pl.edu.agh.bo.airportgates.dataloader.InvalidFileFormatException;
+import pl.edu.agh.bo.airportgates.dataloader.ProblemDataLoader;
 import pl.edu.agh.bo.airportgates.gapsolver.ABCGateAssignmentSolverImpl;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
-import pl.edu.agh.bo.airportgates.model.*;
-import pl.edu.agh.bo.airportgates.util.MapBasedPaxFlowFunction;
-import pl.edu.agh.bo.airportgates.util.Pair;
-import pl.edu.agh.bo.airportgates.util.SimpleGateDistancesFunction;
+import pl.edu.agh.bo.airportgates.model.Gate;
+import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
+import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Michał Ciołczyk
@@ -70,7 +62,7 @@ public class Main {
     private static GateAssignmentProblem createProblem() throws IOException, InvalidFileFormatException {
         return ProblemDataLoader.loadProblemFromFile("data/test2.txt");
     }
-    
+
     private static void setABCParams(SolverFactory solverFactory) {
         solverFactory.setParameter(ABCILPSolver.ITERATIONS_PARAMETER, 1000);
         solverFactory.setParameter(ABCILPSolver.LOWER_BOUND_PARAMETER, 0);
