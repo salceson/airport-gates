@@ -1,15 +1,17 @@
 package pl.edu.agh.bo.airportgates.main;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import net.sf.javailp.SolverFactoryGurobi;
 import net.sf.javailp.SolverFactoryLpSolve;
 import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
 import pl.edu.agh.bo.airportgates.dataloader.InvalidFileFormatException;
 import pl.edu.agh.bo.airportgates.dataloader.ProblemDataLoader;
+import net.sf.javailp.SolverFactory;
+import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolver;
+import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
+import pl.edu.agh.bo.airportgates.gapsolver.ABCGateAssignmentSolverImpl;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
-import pl.edu.agh.bo.airportgates.gapsolver.ILPGateAssignmentSolverImpl;
 import pl.edu.agh.bo.airportgates.model.*;
 import pl.edu.agh.bo.airportgates.util.MapBasedPaxFlowFunction;
 import pl.edu.agh.bo.airportgates.util.Pair;
@@ -41,7 +43,10 @@ public class Main {
 
 //        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryGurobi());
 //        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryLpSolve());
-        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new ABCILPSolverFactory());
+        SolverFactory solverFactory = new ABCILPSolverFactory();
+        setABCParams(solverFactory);
+//        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(solverFactory);
+        final GateAssignmentSolver solver = new ABCGateAssignmentSolverImpl(solverFactory);
         final Optional<GateAssignmentResult> gapResultOptional = solver.solve(gateAssignmentProblem);
 
         long endTime = System.currentTimeMillis();
@@ -64,5 +69,17 @@ public class Main {
 
     private static GateAssignmentProblem createProblem() throws IOException, InvalidFileFormatException {
         return ProblemDataLoader.loadProblemFromFile("data/test2.txt");
+    }
+    
+    private static void setABCParams(SolverFactory solverFactory) {
+        solverFactory.setParameter(ABCILPSolver.ITERATIONS_PARAMETER, 1000);
+        solverFactory.setParameter(ABCILPSolver.LOWER_BOUND_PARAMETER, 0);
+        solverFactory.setParameter(ABCILPSolver.UPPER_BOUND_PARAMETER, 1);
+        solverFactory.setParameter(ABCILPSolver.MODIFICATION_RATE_PARAMETER, 0.7);
+        solverFactory.setParameter(ABCILPSolver.THREAD_POOL_SIZE_PARAMETER, 8);
+        solverFactory.setParameter(ABCILPSolver.BEES_COUNT_PARAMETER, 50);
+        solverFactory.setParameter(ABCILPSolver.SEARCH_RANGE_PARAMETER, 2.0);
+        solverFactory.setParameter(ABCILPSolver.ABANDONMENT_LIMIT_PARAMETER, 50);
+        solverFactory.setParameter(ABCILPSolver.SCOUT_BEES_NUMBER_PARAMETER, 20);
     }
 }

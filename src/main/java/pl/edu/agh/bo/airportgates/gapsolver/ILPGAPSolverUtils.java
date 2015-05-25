@@ -32,7 +32,7 @@ class ILPGAPSolverUtils {
         for (Flight iFlight : flights) {
             int j = 0;
             for (Flight jFlight : flights) {
-                if(i == j || iFlight.isAtGateAfter(jFlight)) {
+                if (i == j || iFlight.isAtGateAfter(jFlight)) {
                     j++;
                     continue;
                 }
@@ -187,7 +187,7 @@ class ILPGAPSolverUtils {
 
             int j = 0;
             for (Flight jFlight : flights) {
-                if(i == j || iFlight.isAtGateAfter(jFlight)) {
+                if (i == j || iFlight.isAtGateAfter(jFlight)) {
                     j++;
                     continue;
                 }
@@ -259,7 +259,7 @@ class ILPGAPSolverUtils {
         for (Flight iFlight : flights) {
             int j = 0;
             for (Flight jFlight : flights) {
-                if(i == j || iFlight.isAtGateAfter(jFlight)) {
+                if (i == j || iFlight.isAtGateAfter(jFlight)) {
                     j++;
                     continue;
                 }
@@ -275,8 +275,6 @@ class ILPGAPSolverUtils {
                         constraints.add(createConstraint89(yVar, xikVar));
                         constraints.add(createConstraint89(yVar, xjlVar));
                         constraints.add(createConstraint10(yVar, xikVar, xjlVar));
-//                        constraints.add(createConstraint7811upper(yVar));
-//                        constraints.add(createConstraint7811lower(yVar));
                     }
                 }
                 j++;
@@ -351,13 +349,13 @@ class ILPGAPSolverUtils {
         return constraints;
     }
 
-    private static Constraint createConstraint7811upper(String var) {
+    static Constraint createConstraint7811upper(String var) {
         final Linear linear = new Linear();
         linear.add(1, var);
         return new Constraint(getNextConstraintName(), linear, "<=", 1);
     }
 
-    private static Constraint createConstraint7811lower(String var) {
+    static Constraint createConstraint7811lower(String var) {
         final Linear linear = new Linear();
         linear.add(1, var);
         return new Constraint(getNextConstraintName(), linear, ">=", 0);
