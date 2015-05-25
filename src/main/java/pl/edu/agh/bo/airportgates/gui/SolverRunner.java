@@ -18,16 +18,12 @@ public class SolverRunner {
         params = GateAssignmentSolverParams.defaultParams();
     }
 
-    // BUHAHAHAHAH.
     public GateAssignmentProblem gateAssignmentProblem;
     public GateAssignmentSolverParams params;
 
     public Optional<GateAssignmentResult> runSolver() {
 
         long startTime = System.currentTimeMillis();
-
-//        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryGurobi());
-//        final GateAssignmentSolver solver = new ILPGateAssignmentSolverImpl(new SolverFactoryLpSolve());
 
         SolverFactory solverFactory = new ABCILPSolverFactory();
         solverFactory.setParameter(ABCILPSolver.ITERATIONS_PARAMETER, params.iterations);
@@ -46,13 +42,6 @@ public class SolverRunner {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Time elapsed: " + (endTime - startTime) / 1000.0 + " s");
-
-//        return gapResultOptional;
-
-//        if (!gapResultOptional.isPresent()) {
-//            System.out.println("No suitable assignment found.");
-//            return Optional.absent();
-//        }
 
         final GateAssignmentResult gapResult = gapResultOptional.get();
 
