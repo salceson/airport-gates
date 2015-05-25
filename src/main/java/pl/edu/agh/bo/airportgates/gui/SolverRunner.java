@@ -12,7 +12,10 @@ import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 public class SolverRunner {
 
