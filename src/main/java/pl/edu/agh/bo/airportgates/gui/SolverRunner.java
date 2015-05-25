@@ -7,6 +7,7 @@ import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
 import pl.edu.agh.bo.airportgates.gapsolver.ABCGateAssignmentSolverImpl;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolver;
 import pl.edu.agh.bo.airportgates.gapsolver.GateAssignmentSolverParams;
+import pl.edu.agh.bo.airportgates.model.Gate;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentResult;
 
@@ -46,21 +47,21 @@ public class SolverRunner {
 
         System.out.println("Time elapsed: " + (endTime - startTime) / 1000.0 + " s");
 
-        return gapResultOptional;
+//        return gapResultOptional;
 
 //        if (!gapResultOptional.isPresent()) {
 //            System.out.println("No suitable assignment found.");
 //            return Optional.absent();
 //        }
 
-//        final GateAssignmentResult gapResult = gapResultOptional.get();
-//
-//        System.out.println(gapResult.getCost());
-//
-//        for (Gate gate : gapResult.getGateAssignments().keySet()) {
-//            System.out.println(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate));
-//        }
-//
-//        return gapResult;
+        final GateAssignmentResult gapResult = gapResultOptional.get();
+
+        System.out.println(gapResult.getCost());
+
+        for (Gate gate : gapResult.getGateAssignments().keySet()) {
+            System.out.println(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate));
+        }
+
+        return gapResultOptional;
     }
 }
