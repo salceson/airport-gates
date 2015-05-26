@@ -3,7 +3,10 @@ package pl.edu.agh.bo.airportgates.gui;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.LogarithmicAxis;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -37,13 +40,22 @@ public class GUI extends JPanel implements ActionListener {
         XYDataset ds = createDataset();
         JFreeChart chart = ChartFactory.createXYLineChart("Iterations best", "Iteration", "Cost",
                 ds, PlotOrientation.VERTICAL, true, true, false);
+
+        final XYPlot plot = chart.getXYPlot();
+        final NumberAxis domainAxis = new NumberAxis("Iterations");
+        final NumberAxis rangeAxis = new LogarithmicAxis("Log(cost)");
+        plot.setDomainAxis(domainAxis);
+        plot.setRangeAxis(rangeAxis);
+        chart.setBackgroundPaint(Color.white);
+        plot.setOutlinePaint(Color.black);
+
         ChartPanel cp = new ChartPanel(chart);
 
         JLabel timeoutLabel = new JLabel("Timeout: ");
         timeoutTF = new JTextField("400");
 
         JLabel iterationsLabel = new JLabel("Iterations: ");
-        iterationsTF = new JTextField("1000");
+        iterationsTF = new JTextField("3000");
 
         JLabel modificationRateLabel = new JLabel("Modification rate: ");
         modificationRateTF = new JTextField("0.7");
@@ -55,7 +67,7 @@ public class GUI extends JPanel implements ActionListener {
         beesCountTF = new JTextField("50");
 
         JLabel abandonmentLimiLabel = new JLabel("Abandonment limit: ");
-        abandonmentLimitTF = new JTextField("50");
+        abandonmentLimitTF = new JTextField("60");
 
         JLabel scoutBeesLabel = new JLabel("Scout bees: ");
         scoutBeesTF = new JTextField("20");
