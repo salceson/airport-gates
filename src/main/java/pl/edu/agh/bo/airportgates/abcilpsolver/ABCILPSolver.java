@@ -259,27 +259,19 @@ public class ABCILPSolver implements Solver {
 
         System.out.println(totalBestSolution.isValid(true));
 
-//        if (totalBestSolution.isValid()) {
-            Result result = new ResultImpl(totalBestSolution.getObjectiveValue());
+        Result result = new ResultImpl(totalBestSolution.getObjectiveValue());
 
-            for (Map.Entry<Object, Long> variableEntry : totalBestSolution.getVariables().entrySet()) {
-                result.put(variableEntry.getKey(), variableEntry.getValue());
-            }
+        for (Map.Entry<Object, Long> variableEntry : totalBestSolution.getVariables().entrySet()) {
+            result.put(variableEntry.getKey(), variableEntry.getValue());
+        }
 
         result.put("bestSolutionIteration", bestSolutionIteration);
 
-            if (verbose) {
-                logger.debug("Found valid solution: " + result);
-            }
+        if (verbose) {
+            logger.debug("Found valid solution: " + result);
+        }
 
-            return result;
-//        }
-//
-//        if (verbose) {
-//            logger.debug("Solution not found.");
-//        }
-//
-//        return null;
+        return result;
     }
 
     private void checkParameters() {
