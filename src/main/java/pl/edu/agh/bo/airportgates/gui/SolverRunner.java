@@ -60,7 +60,9 @@ public class SolverRunner {
         String filename = "gap_result_" + System.currentTimeMillis();
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(filename), "utf-8"))) {
+            writer.write("Time elapsed: " + (endTime - startTime) / 1000.0 + " s\n");
             writer.write("Cost: " + gapResult.getCost() + "\n");
+            writer.write("Found at iteration: " + gapResult.getBestSolutionIteration() + "\n");
             for (Gate gate : gapResult.getGateAssignments().keySet()) {
                 writer.write(gate.getNumber() + ": " + gapResult.getGateAssignments().get(gate) + "\n");
             }
