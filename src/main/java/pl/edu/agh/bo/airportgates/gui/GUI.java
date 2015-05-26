@@ -173,7 +173,7 @@ public class GUI extends JPanel implements ActionListener {
                 }
             });
             runningThread.start();
-        } else if (e.getSource() == stopButton) {
+        } else if (e.getSource() == stopButton && runningThread != null) {
             runningThread.stop();
             runningThread = null;
         }
