@@ -66,7 +66,7 @@ public class GUI extends JPanel implements ActionListener {
         JLabel beesCountLabel = new JLabel("Bees count: ");
         beesCountTF = new JTextField("50");
 
-        JLabel abandonmentLimiLabel = new JLabel("Abandonment limit: ");
+        JLabel abandonmentLimitLabel = new JLabel("Abandonment limit: ");
         abandonmentLimitTF = new JTextField("60");
 
         JLabel scoutBeesLabel = new JLabel("Scout bees: ");
@@ -100,7 +100,7 @@ public class GUI extends JPanel implements ActionListener {
         paramsPanel.add(threadPoolSizeTF, 7);
         paramsPanel.add(beesCountLabel, 8);
         paramsPanel.add(beesCountTF, 9);
-        paramsPanel.add(abandonmentLimiLabel, 10);
+        paramsPanel.add(abandonmentLimitLabel, 10);
         paramsPanel.add(abandonmentLimitTF, 11);
         paramsPanel.add(scoutBeesLabel, 12);
         paramsPanel.add(scoutBeesTF, 13);
