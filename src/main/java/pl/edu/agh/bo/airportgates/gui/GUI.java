@@ -133,6 +133,11 @@ public class GUI extends JPanel implements ActionListener {
                 return;
             }
 
+            if (runningThread != null) {
+                runningThread.stop();
+                runningThread = null;
+            }
+
             int timeout;
             int iterations;
             double modificationRate;
@@ -149,8 +154,7 @@ public class GUI extends JPanel implements ActionListener {
                 beesCount = Integer.parseInt(beesCountTF.getText());
                 abandonmentLimit = Integer.parseInt(abandonmentLimitTF.getText());
                 scoutBeesNumber = Integer.parseInt(scoutBeesTF.getText());
-            }
-            catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(frame, "Params have to be numbers.");
                 return;
             }
