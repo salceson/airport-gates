@@ -2,7 +2,6 @@ package pl.edu.agh.bo.airportgates.gapsolver;
 
 import com.google.common.base.Optional;
 import net.sf.javailp.*;
-import pl.edu.agh.bo.airportgates.abcilpsolver.ABCILPSolverFactory;
 import pl.edu.agh.bo.airportgates.model.Flight;
 import pl.edu.agh.bo.airportgates.model.Gate;
 import pl.edu.agh.bo.airportgates.model.GateAssignmentProblem;
@@ -91,8 +90,10 @@ public class ABCGateAssignmentSolverImpl implements GateAssignmentSolver {
         final List<Gate> gates = gap.getGates();
 
         final long cost = ilpResult.getObjective().longValue();
+        final long bestSolutionIteraiton = (long) ilpResult.get("bestSolutionIteration");
 
-        final GateAssignmentResult.Builder gapResultBuilder = new GateAssignmentResult.Builder(cost);
+        final GateAssignmentResult.Builder gapResultBuilder =
+                new GateAssignmentResult.Builder(cost, bestSolutionIteraiton);
 
         int i = 0;
         for (Flight flight : flights) {

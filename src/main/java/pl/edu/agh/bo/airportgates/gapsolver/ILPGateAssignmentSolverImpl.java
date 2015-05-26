@@ -91,7 +91,7 @@ public class ILPGateAssignmentSolverImpl implements GateAssignmentSolver {
 
         final long cost = ilpResult.getObjective().longValue();
 
-        final GateAssignmentResult.Builder gapResultBuilder = new GateAssignmentResult.Builder(cost);
+        final GateAssignmentResult.Builder gapResultBuilder = new GateAssignmentResult.Builder(cost, 0);
 
         int i = 0;
         for (Flight flight : flights) {

@@ -168,6 +168,8 @@ public class ABCILPSolver implements Solver {
         Collections.sort(initialSolutions);
         Solution totalBestSolution = initialSolutions.get(beesCount - 1);
 
+        long bestSolutionIteration = 0;
+
         //Main loop
         for (int cycle = 1; cycle <= iterations; cycle++) {
             if (verbose) {
@@ -238,6 +240,7 @@ public class ABCILPSolver implements Solver {
 
             if (bestSolution.compareTo(totalBestSolution) > 0) {
                 totalBestSolution = bestSolution;
+                bestSolutionIteration = cycle;
             }
 
             if (cycle % 5 == 0) {
@@ -262,6 +265,8 @@ public class ABCILPSolver implements Solver {
             for (Map.Entry<Object, Long> variableEntry : totalBestSolution.getVariables().entrySet()) {
                 result.put(variableEntry.getKey(), variableEntry.getValue());
             }
+
+        result.put("bestSolutionIteration", bestSolutionIteration);
 
             if (verbose) {
                 logger.debug("Found valid solution: " + result);

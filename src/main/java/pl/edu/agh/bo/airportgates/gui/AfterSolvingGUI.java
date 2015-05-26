@@ -17,14 +17,18 @@ public class AfterSolvingGUI extends JPanel {
     public AfterSolvingGUI(GateAssignmentResult result, double timeElapsed) {
         super(new BorderLayout());
 
-        JPanel timeAndObjectivePanel = new JPanel(new GridLayout(2, 1));
-        timeAndObjectivePanel.setSize(400, 200);
+        JPanel statisticsPanel = new JPanel(new GridLayout(3, 1));
+        statisticsPanel.setSize(400, 200);
 
         JLabel timeLabel = new JLabel("Time elapsed: " + timeElapsed + " s.");
-        timeAndObjectivePanel.add(timeLabel);
+        statisticsPanel.add(timeLabel);
 
         JLabel objectiveLabel = new JLabel("Objective: " + result.getCost());
-        timeAndObjectivePanel.add(objectiveLabel);
+        statisticsPanel.add(objectiveLabel);
+
+        JLabel bestSolutionIterationLabel = new JLabel("Best solution found at iteration: "
+                + result.getBestSolutionIteration());
+        statisticsPanel.add(bestSolutionIterationLabel);
 
         JTextArea resultsTextArea = new JTextArea();
         for (Gate gate : result.getGateAssignments().keySet()) {
@@ -49,7 +53,7 @@ public class AfterSolvingGUI extends JPanel {
         buttonPanel.setSize(400, 100);
         buttonPanel.add(button);
 
-        add(timeAndObjectivePanel, BorderLayout.PAGE_START);
+        add(statisticsPanel, BorderLayout.PAGE_START);
         add(resultsScrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.PAGE_END);
     }
